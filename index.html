@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>DM Board · Deal Engine</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#14181f;--mute:#6b7280;--line:#e3e6eb;--brand:#0f2a43;--go:#0a7d4f;--goBg:#e7f6ee;--warn:#b45309;--warnBg:#fff4e0;--bad:#b42318;--badBg:#fdecea;--blue:#1d4ed8;--blueBg:#e8efff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+header{background:var(--brand);color:#fff;padding:0 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+.logo{font-weight:700;font-size:16px;padding:14px 0;white-space:nowrap}
+.logo span{opacity:.6;font-weight:500}
+nav{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+nav button{background:none;border:0;color:#fff;opacity:.65;padding:16px 12px;border-bottom:3px solid transparent;font-weight:600}
+nav button.on{opacity:1;border-bottom-color:#fff}
+.who{display:flex;align-items:center;gap:10px;font-size:14px;padding:8px 0}
+.who button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:6px;padding:5px 10px;font-size:13px}
+main{padding:20px;max-width:1500px;margin:0 auto}
+h2{font-size:16px;margin:0 0 12px}
+h3{font-size:12px;margin:0 0 8px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tile .n{font-size:28px;font-weight:700;line-height:1.1}
+.tile .n small{font-size:15px;color:var(--mute);font-weight:600}
+.tile .l{font-size:13px;color:var(--mute);margin-top:2px}
+.tile.good .n{color:var(--go)}.tile.warn .n{color:var(--warn)}.tile.bad .n{color:var(--bad)}
+label{display:block;font-weight:600;font-size:13px;margin:14px 0 6px}
+label em{font-style:normal;color:var(--bad)}
+input[type=text],input[type=number],textarea,select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px 12px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px}
+textarea{min-height:76px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid #cfd4dc;background:#fff;border-radius:999px;padding:6px 12px;font-size:13.5px}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn{border:1px solid #cfd4dc;background:#fff;border-radius:8px;padding:7px 12px;font-weight:600;font-size:13.5px;color:var(--ink)}
+.btn.p{background:var(--go);border-color:var(--go);color:#fff}
+.btn.d{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.big{padding:12px 18px;font-size:15px;width:100%;margin-top:18px}
+.btn.s{padding:4px 9px;font-size:12.5px}
+.btn.q{border-color:transparent;background:none;color:var(--mute);padding:7px 6px}
+.rule{background:var(--blueBg);border-radius:10px;padding:12px 14px;font-size:13.5px;margin-bottom:6px}
+.rule b{display:block;margin-bottom:4px}
+.rule ol{margin:0;padding-left:18px}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(230px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:#eaecf0;border-radius:12px;padding:10px;min-height:120px}
+.col h3{display:flex;justify-content:space-between;margin:2px 4px 10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:8px}
+.card.cold{border-left:4px solid var(--warn)}
+.card.late{border-left:4px solid var(--bad)}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card .h{font-weight:700;text-decoration:none;color:var(--blue);word-break:break-all}
+.card .age{font-size:12px;color:var(--mute);white-space:nowrap}
+.card .sub{font-size:13px;color:var(--mute);margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:11.5px;background:#eef0f3;border-radius:5px;padding:2px 6px;font-weight:600}
+.tag.dfy{background:var(--goBg);color:var(--go)}.tag.m{background:var(--blueBg);color:var(--blue)}
+.flag{font-size:12px;font-weight:700;margin-top:6px}
+.flag.w{color:var(--warn)}.flag.b{color:var(--bad)}
+.say{background:#f6f7f9;border-radius:8px;padding:8px 10px;font-size:13.5px;margin-top:8px;white-space:pre-wrap;word-break:break-word}
+.say b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin-bottom:2px}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+.empty{color:var(--mute);font-size:13px;padding:8px 4px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid #eef0f3;vertical-align:middle}
+td.num,th.num{text-align:right}
+.rank{font-weight:700;color:var(--mute);width:34px}
+.big{font-size:22px;font-weight:700}
+.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:#eef0f3;white-space:nowrap}
+.pill.new,.pill.queued{background:var(--badBg);color:var(--bad)}.pill.talking,.pill.qualified,.pill.link_sent{background:var(--blueBg);color:var(--blue)}
+.pill.booked,.pill.showed{background:var(--goBg);color:var(--go)}.pill.ghosted,.pill.no_show{background:var(--warnBg);color:var(--warn)}
+.bar{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--go)}
+.bar i.full{background:var(--bad)}
+.cap{margin-bottom:12px;font-size:14px}
+.cap .r{display:flex;justify-content:space-between;font-weight:600}
+.seg{display:inline-flex;border:1px solid #cfd4dc;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.seg button{border:0;background:#fff;padding:7px 14px;font-weight:600;font-size:13.5px;color:var(--mute)}
+.seg button.on{background:var(--brand);color:#fff}
+.line{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.line input[type=text]{flex:1;min-width:140px}
+.line select{width:auto}
+.gate{max-width:420px;margin:12vh auto;padding:0 16px}
+.gate .box{padding:26px}
+.people{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.people button{background:#fff;border:1px solid #cfd4dc;border-radius:10px;padding:16px 10px;font-weight:700}
+.people button small{display:block;font-weight:500;color:var(--mute);margin-top:2px}
+.note{font-size:13px;color:var(--mute)}
+.alert{background:var(--warnBg);color:var(--warn);border-radius:10px;padding:10px 14px;font-weight:600;font-size:14px;margin-bottom:14px}
+.sec{margin-top:20px}
+.ctr{display:flex;align-items:center;gap:10px}
+.ctr button{width:34px;height:34px;border-radius:8px;border:1px solid #cfd4dc;background:#fff;font-size:18px;font-weight:700}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14181f;color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:90vw}
+#toast.on{opacity:1}#toast.err{background:var(--bad)}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}main{padding:14px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script>
+const API='https://dgnbxykkfnnkcfbycozu.supabase.co/functions/v1/board';
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+let code=LS.get('de_code')||'',meId=LS.get('de_me')||'',tab=LS.get('de_tab')||'';
+let S=null,busy=false,draft={},ui={open:{},deadFor:null,range:'week',q:'',filter:'live',ghost:false};
+try{const qp=new URLSearchParams(location.search);if(qp.get('k')){code=qp.get('k');LS.set('de_code',code);history.replaceState(null,'',location.pathname)}}catch(e){}
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ACTIVE=['new','talking','qualified','link_sent'];
+const COLS=['new','talking','qualified','link_sent','booked'];
+const LABEL={queued:'Queued',new:'New handoff',talking:'In conversation',qualified:'Qualified',link_sent:'Link sent',booked:'Booked',showed:'Showed',no_show:'No-show',ghosted:'Ghosted',dead:'Dead'};
+const NEXT={new:['talking','Start conversation'],talking:['qualified','Qualified'],qualified:['link_sent','Link sent'],link_sent:['booked','Booked ✓']};
+const PREV={talking:'new',qualified:'talking',link_sent:'qualified',booked:'link_sent'};
+const DEAD=['No money','Not interested','Not the decision maker','Not a fit','Spam / wrong person'];
+const CH={entry_trigger:['Keyword','Story reply','Follow DM','Comment','"That\'s me" vote','Other'],goal:['First deal','Building a portfolio'],capital:['Under $5K','$5–15K','$15–30K','$30K+'],credit:['650+','Under 650','Not sure'],timeline:['Now','1–3 months','3–6 months','Just looking'],decision_maker:['Yes','No, someone else involved']};
+const ROLE={opener:'Opener',booker:'Booker',manager:'Manager'};
+
+const dfmt=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Chicago'});
+const dayOf=ts=>dfmt.format(new Date(ts));
+function rangeStart(r){const t=dayOf(S.now);if(r==='today')return t;const d=new Date(t+'T00:00:00Z');if(r==='week')d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));else d.setUTCDate(d.getUTCDate()-29);return d.toISOString().slice(0,10)}
+const inR=(ts,r)=>!!ts&&dayOf(ts)>=rangeStart(r);
+const mins=ts=>Math.max(0,(new Date(S.now)-new Date(ts))/60000);
+function ago(ts){const m=mins(ts);if(m<60)return Math.round(m)+'m';if(m<1440)return Math.round(m/60)+'h';return Math.round(m/1440)+'d'}
+const nm=id=>{const s=S.setters.find(x=>x.id===id);return s?s.name:'—'};
+const me=()=>S&&S.setters.find(s=>s.id===meId&&s.active);
+const track=c=>c.capital==='$30K+'&&c.credit==='650+'?'DFY':(c.capital&&(c.capital!=='$30K+'||c.credit==='Under 650')?'Mentorship':'');
+const load=id=>S.conversations.filter(c=>c.booker_id===id&&ACTIVE.includes(c.stage)).length;
+const cold=c=>['talking','qualified','link_sent'].includes(c.stage)&&mins(c.last_activity_at)>=1440;
+const late=c=>c.stage==='new'&&mins(c.assigned_at||c.created_at)>=15;
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+
+function toast(t,err){const el=$('#toast');el.textContent=t;el.className='on'+(err?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>el.className='',err?4500:2200)}
+async function api(action,data){
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({action,code,setter_id:meId||null},data||{}))});
+  const j=await r.json().catch(()=>({error:'Bad response'}));
+  if(!r.ok||j.error){const e=new Error(j.error||'Something went wrong');e.status=r.status;throw e}
+  return j;
+}
+async function refresh(render){
+  try{S=await api('state');if(render!==false)draw()}
+  catch(e){if(e.status===401){code='';LS.set('de_code',null);S=null;draw();toast('Wrong access code',true)}else if(render!==false)toast('Connection problem, retrying',true)}
+}
+async function act(action,data,msg){
+  if(busy)return null;busy=true;
+  try{const r=await api(action,data);if(msg)toast(msg);await refresh();return r}
+  catch(e){toast(e.message,true);return null}
+  finally{busy=false}
+}
+function copy(t){const done=()=>toast('Copied');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>fallback())}else fallback();function fallback(){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){}a.remove()}}
+
+/* ---------- screens ---------- */
+function gate(){return `<div class="gate"><div class="box"><h2>DM Board · Deal Engine</h2><p class="note">Enter the team access code to get in. You only do this once on this device.</p><label>Access code</label><input type="text" id="codeIn" autocomplete="off" autocapitalize="off"><button class="btn d big" data-a="enter">Enter</button></div></div>`}
+function who(){const ppl=S.setters.filter(s=>s.active);return `<div class="gate" style="max-width:560px"><div class="box"><h2>Who are you?</h2><p class="note">Pick your name. The board remembers it on this device.</p><div class="people">${ppl.map(s=>`<button data-a="pick" data-id="${s.id}">${esc(s.name)}<small>${ROLE[s.role]}</small></button>`).join('')}</div>${ppl.length<2?'<p class="note" style="margin-top:14px">No setters added yet. Charlie adds them in the Manager tab.</p>':''}</div></div>`}
+function tabsFor(m){const t=m.role==='opener'?[['handoff','Hand off']]:m.role==='booker'?[['board','My board']]:[['all','Overview'],['handoff','Hand off']];t.push(['lb','Leaderboard']);if(m.role!=='manager')t.push(['all','All conversations']);if(S.is_admin)t.push(['admin','Manager']);return t}
+function shell(m){return `<header><div class="logo">DM Board <span>· Deal Engine</span></div><nav>${tabsFor(m).map(t=>`<button class="${t[0]===tab?'on':''}" data-a="tab" data-id="${t[0]}">${t[1]}</button>`).join('')}</nav><div class="who"><span>${esc(m.name)} · ${ROLE[m.role]}</span><button data-a="switch">Switch</button></div></header>`}
+function tile(n,l,cls){return `<div class="tile ${cls||''}"><div class="n">${n}</div><div class="l">${l}</div></div>`}
+function chips(f){return `<div class="chips">${CH[f].map((v,i)=>`<button type="button" class="chip ${draft[f]===v?'on':''}" data-a="chip" data-id="${f}|${i}">${esc(v)}</button>`).join('')}</div>`}
+function capacity(){const bk=S.setters.filter(s=>s.active&&s.role==='booker');const q=S.conversations.filter(c=>c.stage==='queued');
+  return `<h3>Booker capacity</h3>${bk.length?bk.map(b=>{const n=load(b.id);return `<div class="cap"><div class="r"><span>${esc(b.name)}</span><span>${n}/${S.cap}</span></div><div class="bar"><i class="${n>=S.cap?'full':''}" style="width:${Math.min(100,n/S.cap*100)}%"></i></div></div>`}).join(''):'<div class="empty">No bookers added yet, so handoffs wait in the queue.</div>'}${q.length?`<div class="alert">${q.length} waiting in the queue · oldest ${ago(q[q.length-1].created_at)}</div>`:''}`}
+
+function handoffView(m){
+  const mine=S.conversations.filter(c=>c.opener_id===m.id);
+  const today=dayOf(S.now),cnt=S.counts.find(c=>c.setter_id===m.id&&c.day===today);
+  const hToday=mine.filter(c=>inR(c.created_at,'today')).length,hWeek=mine.filter(c=>inR(c.created_at,'week'));
+  const bWeek=hWeek.filter(c=>c.booked_at).length;
+  return `<div class="grid2"><div class="box">
+    <div class="rule"><b>Hand off the moment all three are true</b><ol><li>They are the decision maker</li><li>You know roughly where they sit on money</li><li>They asked about the next step, the price or how it works</li></ol></div>
+    <p class="note">You never send the booking link. Qualify, pass it on, open the next one.</p>
+    <label>Instagram handle <em>*</em></label><input type="text" data-f="ig_handle" value="${esc(draft.ig_handle)}" placeholder="@theirhandle or paste the profile link" autocomplete="off" autocapitalize="off">
+    <label>First name</label><input type="text" data-f="first_name" value="${esc(draft.first_name)}" autocomplete="off">
+    <label>Came in via</label>${chips('entry_trigger')}
+    <label>Goal</label>${chips('goal')}
+    <label>Capital</label>${chips('capital')}
+    <label>Credit score</label>${chips('credit')}
+    <label>Timeline</label>${chips('timeline')}
+    <label>Decision maker</label>${chips('decision_maker')}
+    <label>Where the conversation stands <em>*</em></label><textarea data-f="where_it_stands" placeholder="Two lines. What they want, what they've told you, anything they're unsure about.">${esc(draft.where_it_stands)}</textarea>
+    <label>The next message the booker should send <em>*</em></label><textarea data-f="opening_message" placeholder="Write it as Alex, so the booker can pick up without the prospect noticing a change.">${esc(draft.opening_message)}</textarea>
+    <button class="btn p big" data-a="handoff">Hand off →</button>
+  </div><div>
+    <div class="tiles">
+      <div class="tile"><div class="ctr"><button data-a="opened" data-id="-1">−</button><div class="n">${cnt?cnt.opened:0}</div><button data-a="opened" data-id="1">+</button></div><div class="l">Conversations opened today</div></div>
+      ${tile(hToday,'Handoffs today')}${tile(hWeek.length,'Handoffs this week')}${tile(bWeek,'Booked from my handoffs this week',bWeek?'good':'')}
+    </div>
+    <div class="box">${capacity()}</div>
+    <div class="box sec"><h3>My recent handoffs</h3>${mine.length?`<table>${mine.slice(0,15).map(c=>`<tr><td><b>@${esc(c.ig_handle)}</b></td><td><span class="pill ${c.stage}">${LABEL[c.stage]}</span></td><td>${c.booker_id?esc(nm(c.booker_id)):'Queue'}</td><td class="num note">${ago(c.created_at)}</td></tr>`).join('')}</table>`:'<div class="empty">Nothing handed off yet.</div>'}</div>
+  </div></div>`;
+}
+
+function card(c){
+  const open=c.stage==='new'||ui.open[c.id],t=track(c),nx=NEXT[c.stage];
+  const link=t==='DFY'?S.links.dfy:S.links.mentorship;
+  let flag='';
+  if(late(c))flag=`<div class="flag b">Waiting ${ago(c.assigned_at||c.created_at)} · pick this up now</div>`;
+  else if(cold(c))flag=`<div class="flag w">No reply logged for ${ago(c.last_activity_at)} · parks at ${S.stale_hours}h</div>`;
+  let acts='';
+  if(ui.deadFor===c.id)acts=`<div class="acts">${DEAD.map((r,i)=>`<button class="btn s" data-a="dead" data-id="${c.id}|${i}">${r}</button>`).join('')}<button class="btn s q" data-a="deadx">Cancel</button></div>`;
+  else if(c.stage==='booked')acts=`<div class="acts"><button class="btn p s" data-a="mv" data-id="${c.id}|showed">Showed</button><button class="btn s" data-a="mv" data-id="${c.id}|no_show">No-show</button><button class="btn s q" data-a="mv" data-id="${c.id}|link_sent">Undo</button></div>`;
+  else acts=`<div class="acts">${nx?`<button class="btn p s" data-a="mv" data-id="${c.id}|${nx[0]}">${nx[1]}</button>`:''}${c.stage!=='new'?`<button class="btn s" data-a="touch" data-id="${c.id}">They replied</button>`:''}${link&&(c.stage==='qualified'||c.stage==='link_sent')?`<button class="btn s" data-a="copy" data-id="${esc(link)}">Copy link</button>`:''}</div><div class="acts" style="margin-top:4px">${PREV[c.stage]?`<button class="btn s q" data-a="mv" data-id="${c.id}|${PREV[c.stage]}">← Back</button>`:''}<button class="btn s q" data-a="mv" data-id="${c.id}|ghosted">Ghosted</button><button class="btn s q" data-a="deadq" data-id="${c.id}">Dead</button>${c.stage!=='new'?`<button class="btn s q" data-a="open" data-id="${c.id}">${open?'Hide':'Details'}</button>`:''}</div>`;
+  const facts=[c.entry_trigger&&'Via '+c.entry_trigger,c.capital,c.credit&&'Credit '+c.credit,c.decision_maker&&'DM: '+c.decision_maker,c.opener_id&&'Opened by '+nm(c.opener_id)].filter(Boolean).join(' · ');
+  return `<div class="card ${late(c)?'late':cold(c)?'cold':''}">
+    <div class="top"><a class="h" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a><span class="age">${ago(c.stage==='booked'?c.booked_at:c.last_activity_at)}</span></div>
+    ${c.first_name?`<div class="sub">${esc(c.first_name)}</div>`:''}
+    <div class="tags">${t?`<span class="tag ${t==='DFY'?'dfy':'m'}">${t}</span>`:''}${c.goal?`<span class="tag">${esc(c.goal)}</span>`:''}${c.timeline?`<span class="tag">${esc(c.timeline)}</span>`:''}</div>
+    ${flag}
+    ${open?`${c.opening_message?`<div class="say"><b>Send next</b>${esc(c.opening_message)}<div class="acts" style="margin-top:6px"><button class="btn s" data-a="copy" data-id="${esc(c.opening_message)}">Copy message</button></div></div>`:''}${c.where_it_stands?`<div class="say"><b>Where it stands</b>${esc(c.where_it_stands)}</div>`:''}${facts?`<div class="sub" style="margin-top:8px">${esc(facts)}</div>`:''}`:''}
+    ${acts}</div>`;
+}
+function boardView(m){
+  const mine=S.conversations.filter(c=>c.booker_id===m.id);
+  const n=load(m.id),bT=mine.filter(c=>inR(c.booked_at,'today')).length,bW=mine.filter(c=>inR(c.booked_at,'week')).length;
+  const b30=mine.filter(c=>inR(c.booked_at,'30d')),sh=b30.filter(c=>c.stage==='showed').length,ns=b30.filter(c=>c.stage==='no_show').length;
+  const cl=mine.filter(cold).length,queue=S.conversations.filter(c=>c.stage==='queued').slice().reverse(),gh=mine.filter(c=>c.stage==='ghosted');
+  return `<div class="tiles">${tile(`${n}<small>/${S.cap}</small>`,'Active conversations',n>=S.cap?'bad':'')}${tile(`${bT}<small>/2</small>`,'Booked today',bT>=2?'good':'')}${tile(bW,'Booked this week')}${tile(sh+ns?Math.round(sh/(sh+ns)*100)+'%':'—','Show rate, last 30 days')}${tile(cl,'Going cold (24h+)',cl?'warn':'')}</div>
+  ${queue.length?`<div class="alert">${queue.length} waiting in the queue. ${n>=S.cap?'Clear a slot to take one.':''}</div><div class="box" style="margin-bottom:16px"><h3>Queue · oldest first</h3>${queue.map(c=>`<div class="line"><b>@${esc(c.ig_handle)}</b><span class="note">${esc(c.first_name||'')} · waiting ${ago(c.created_at)}</span><button class="btn p s" data-a="claim" data-id="${c.id}">Claim</button></div>`).join('')}</div>`:''}
+  <div class="cols">${COLS.map(s=>{const list=mine.filter(c=>c.stage===s).sort((a,b)=>new Date(a.last_activity_at)-new Date(b.last_activity_at));return `<div class="col"><h3><span>${LABEL[s]}</span><span>${list.length}</span></h3>${list.map(card).join('')||'<div class="empty">Empty</div>'}</div>`}).join('')}</div>
+  <div class="box sec"><h3 style="display:flex;justify-content:space-between"><span>Ghosted · parking lot (${gh.length})</span><button class="btn s q" data-a="ghost">${ui.ghost?'Hide':'Show'}</button></h3>${ui.ghost?(gh.map(c=>`<div class="line"><a class="h" style="color:var(--blue);font-weight:700;text-decoration:none" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a><span class="note">${esc(c.first_name||'')} · parked ${ago(c.closed_at||c.last_activity_at)} ago</span><button class="btn s" data-a="mv" data-id="${c.id}|talking">They replied, bring back</button><button class="btn s q" data-a="deadq2" data-id="${c.id}">Dead</button></div>`).join('')||'<div class="empty">Nothing parked.</div>'):'<div class="note">No reply for 48 hours parks a conversation here and frees the slot.</div>'}</div>`;
+}
+
+function lbView(){
+  const r=ui.range,bk=S.setters.filter(s=>s.active&&s.role==='booker'),op=S.setters.filter(s=>s.active&&s.role==='opener');
+  const rows=bk.map(b=>{const bc=S.conversations.filter(c=>c.booker_id===b.id&&inR(c.booked_at,r));const sh=bc.filter(c=>c.stage==='showed').length,ns=bc.filter(c=>c.stage==='no_show').length;return{n:b.name,booked:bc.length,show:sh+ns?Math.round(sh/(sh+ns)*100)+'%':'—',cash:bc.reduce((a,c)=>a+Number(c.cash||0),0),load:load(b.id)}}).sort((a,b)=>b.booked-a.booked||b.cash-a.cash);
+  const orow=op.map(o=>{const h=S.conversations.filter(c=>c.opener_id===o.id&&inR(c.created_at,r));return{n:o.name,h:h.length,b:h.filter(c=>c.booked_at&&new Date(c.booked_at)-new Date(c.created_at)<=7*864e5).length,o:S.counts.filter(c=>c.setter_id===o.id&&c.day>=rangeStart(r)).reduce((a,c)=>a+c.opened,0)}}).sort((a,b)=>b.b-a.b||b.h-a.h);
+  const medal=i=>['🥇','🥈','🥉'][i]||i+1;
+  return `<div class="seg">${[['today','Today'],['week','This week'],['30d','Last 30 days']].map(x=>`<button class="${r===x[0]?'on':''}" data-a="range" data-id="${x[0]}">${x[1]}</button>`).join('')}</div>
+  <div class="grid2"><div class="box"><h2>Bookers · booked calls</h2>${rows.length?`<table><tr><th></th><th>Booker</th><th class="num">Booked</th><th class="num">Show rate</th><th class="num">Cash</th><th class="num">Active</th></tr>${rows.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num big">${x.booked}</td><td class="num">${x.show}</td><td class="num">${money(x.cash)}</td><td class="num">${x.load}/${S.cap}</td></tr>`).join('')}</table>`:'<div class="empty">No bookers added yet.</div>'}<p class="note" style="margin-top:12px">Ranked on booked calls. Show rate and cash sit next to it so a full calendar of no-shows doesn't win.</p></div>
+  <div class="box"><h2>Openers · handoffs that booked</h2>${orow.length?`<table><tr><th></th><th>Opener</th><th class="num">Booked</th><th class="num">Handoffs</th><th class="num">Opened</th></tr>${orow.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num big">${x.b}</td><td class="num">${x.h}</td><td class="num">${x.o}</td></tr>`).join('')}</table>`:'<div class="empty">No openers added yet.</div>'}<p class="note" style="margin-top:12px">Ranked on handoffs that booked within 7 days, not on how many were passed over.</p></div></div>`;
+}
+
+function allRows(){
+  const q=ui.q.trim().toLowerCase().replace(/^@/,''),f=ui.filter;
+  const bk=S.setters.filter(s=>s.active&&s.role==='booker');
+  const list=S.conversations.filter(c=>{if(q&&!(c.ig_handle.includes(q)||(c.first_name||'').toLowerCase().includes(q)))return false;if(q)return true;if(f==='live')return c.stage==='queued'||ACTIVE.includes(c.stage);if(f==='booked')return['booked','showed','no_show'].includes(c.stage);if(f==='closed')return['ghosted','dead'].includes(c.stage);return true}).slice(0,300);
+  return list.length?list.map(c=>`<tr><td><a href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:none">@${esc(c.ig_handle)}</a><div class="note">${esc(c.first_name||'')}</div></td><td><span class="pill ${c.stage}">${LABEL[c.stage]}</span>${c.stage==='dead'&&c.dead_reason?`<div class="note">${esc(c.dead_reason)}</div>`:''}</td><td>${S.is_admin&&(c.stage==='queued'||ACTIVE.includes(c.stage))?`<select data-re="${c.id}"><option value="">${c.booker_id?esc(nm(c.booker_id)):'Queue'}</option>${bk.filter(b=>b.id!==c.booker_id).map(b=>`<option value="${b.id}">→ ${esc(b.name)}</option>`).join('')}</select>`:(c.booker_id?esc(nm(c.booker_id)):'Queue')}</td><td>${c.opener_id?esc(nm(c.opener_id)):'—'}</td><td class="num">${ago(c.last_activity_at)}</td><td class="num">${ago(c.created_at)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nothing here.</td></tr>';
+}
+function allView(){
+  const live=S.conversations.filter(c=>ACTIVE.includes(c.stage)),q=S.conversations.filter(c=>c.stage==='queued').length;
+  const bT=S.conversations.filter(c=>inR(c.booked_at,'today')).length,bW=S.conversations.filter(c=>inR(c.booked_at,'week')).length,hT=S.conversations.filter(c=>inR(c.created_at,'today')).length;
+  return `<div class="tiles">${tile(live.length,'Live conversations')}${tile(q,'In the queue',q?'bad':'')}${tile(hT,'Handoffs today')}${tile(bT,'Booked today',bT?'good':'')}${tile(bW,'Booked this week')}${tile(live.filter(cold).length,'Going cold (24h+)',live.some(cold)?'warn':'')}</div>
+  ${S.slack_configured?'':'<div class="alert">Slack is not connected yet, so handoffs are not posting to #dm-handoff. Connect it in the Manager tab.</div>'}
+  <div class="grid2" style="grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)"><div class="box"><div class="line"><input type="text" id="q" placeholder="Search a handle or name to see who has it" value="${esc(ui.q)}" autocomplete="off"><div class="seg" style="margin:0">${[['live','Live'],['booked','Booked'],['closed','Closed'],['all','All']].map(x=>`<button class="${ui.filter===x[0]?'on':''}" data-a="filter" data-id="${x[0]}">${x[1]}</button>`).join('')}</div></div><div style="overflow-x:auto"><table><thead><tr><th>Prospect</th><th>Stage</th><th>Booker</th><th>Opener</th><th class="num">Last activity</th><th class="num">Handed off</th></tr></thead><tbody id="rows">${allRows()}</tbody></table></div></div><div class="box">${capacity()}</div></div>`;
+}
+
+function adminView(){
+  const a=S.admin||{},site=a.site_url||location.origin;
+  const showed=S.conversations.filter(c=>c.stage==='showed');
+  return `<div class="grid2"><div>
+  <div class="box"><h2>Team</h2>${S.setters.map(s=>`<div class="line"><input type="text" id="n_${s.id}" value="${esc(s.name)}"><select id="r_${s.id}">${Object.keys(ROLE).map(r=>`<option value="${r}" ${s.role===r?'selected':''}>${ROLE[r]}</option>`).join('')}</select><label style="margin:0;font-weight:500"><input type="checkbox" id="a_${s.id}" ${s.active?'checked':''}> Active</label><button class="btn s" data-a="saveSetter" data-id="${s.id}">Save</button></div>`).join('')}
+  <h3 style="margin-top:16px">Add someone</h3><div class="line"><input type="text" id="n_new" placeholder="Name"><select id="r_new"><option value="opener">Opener</option><option value="booker">Booker</option><option value="manager">Manager</option></select><button class="btn d s" data-a="addSetter">Add</button></div></div>
+  <div class="box sec"><h2>Cash collected on showed calls</h2><p class="note">Feeds the cash column on the leaderboard.</p>${showed.length?showed.map(c=>`<div class="line"><b>@${esc(c.ig_handle)}</b><span class="note">${esc(nm(c.booker_id))}</span><input type="number" id="c_${c.id}" value="${Number(c.cash||0)}" style="width:120px;flex:none" min="0"><button class="btn s" data-a="cash" data-id="${c.id}">Save</button></div>`).join(''):'<div class="empty">No showed calls yet.</div>'}</div>
+  </div><div>
+  <div class="box"><h2>Team link</h2><p class="note">Send this to the setters. It lets them straight in.</p><div class="line"><input type="text" readonly value="${esc(site+'/?k='+(a.team_code||''))}"><button class="btn s" data-a="copy" data-id="${esc(site+'/?k='+(a.team_code||''))}">Copy</button></div></div>
+  <div class="box sec"><h2>Slack · #dm-handoff</h2><p class="note">${S.slack_configured?'Connected. Handoffs, queue alerts and booked calls post to the channel.':'Not connected. Paste the incoming webhook URL for #dm-handoff below.'}</p><div class="line"><input type="text" id="s_hook" placeholder="${S.slack_configured?'Paste a new webhook URL to replace the current one':'https://hooks.slack.com/services/…'}" autocomplete="off"><button class="btn d s" data-a="saveHook">Save</button><button class="btn s" data-a="testSlack">Send test</button></div></div>
+  <div class="box sec"><h2>Booking links and cap</h2><label>Done-for-you link</label><input type="text" id="s_dfy" value="${esc(a.dfy_link)}"><label>Mentorship link</label><input type="text" id="s_men" value="${esc(a.mentorship_link)}" placeholder="Calendly or funnel link the booker sends"><label>Active conversations per booker</label><input type="number" id="s_cap" value="${esc(a.cap||S.cap)}" min="1"><button class="btn d big" data-a="saveSettings">Save</button></div>
+  </div></div>`;
+}
+
+function draw(){
+  const app=$('#app');
+  if(!code||!S){app.innerHTML=gate();return}
+  const m=me();
+  if(!m){app.innerHTML=who();return}
+  const ts=tabsFor(m);if(!ts.some(t=>t[0]===tab))tab=ts[0][0];
+  const v=tab==='handoff'?handoffView(m):tab==='board'?boardView(m):tab==='lb'?lbView():tab==='admin'?adminView():allView();
+  app.innerHTML=shell(m)+'<main>'+v+'</main>';
+}
+
+/* ---------- actions ---------- */
+const H={
+  enter(){const v=($('#codeIn').value||'').trim();if(!v)return;code=v;LS.set('de_code',v);refresh()},
+  pick(el){meId=el.dataset.id;LS.set('de_me',meId);tab='';draw()},
+  switch(){meId='';LS.set('de_me',null);draw()},
+  tab(el){tab=el.dataset.id;LS.set('de_tab',tab);ui.deadFor=null;draw()},
+  chip(el){const p=el.dataset.id.split('|'),v=CH[p[0]][+p[1]];draft[p[0]]=draft[p[0]]===v?'':v;draw()},
+  async handoff(){
+    if(!(draft.ig_handle||'').trim())return toast('Add the Instagram handle',true);
+    if(!(draft.where_it_stands||'').trim())return toast('Add where the conversation stands',true);
+    if(!(draft.opening_message||'').trim())return toast('Add the next message for the booker',true);
+    const d=draft;const r=await act('handoff',d);
+    if(r){draft={};draw();toast(r.queued?'Handed off. Every booker is full, so it is in the queue.':'Handed off to '+r.assigned_to+(r.slack==='sent'?' · posted in Slack':''))}
+  },
+  opened(el){act('opened',{delta:+el.dataset.id})},
+  mv(el){const p=el.dataset.id.split('|');act('move',{id:p[0],to:p[1]},p[1]==='booked'?'Booked. Nice.':null)},
+  touch(el){act('touch',{id:el.dataset.id},'Timer reset')},
+  claim(el){act('claim',{id:el.dataset.id},'Claimed')},
+  open(el){ui.open[el.dataset.id]=!ui.open[el.dataset.id];draw()},
+  deadq(el){ui.deadFor=el.dataset.id;draw()},
+  deadq2(el){act('move',{id:el.dataset.id,to:'dead',dead_reason:'Went cold'})},
+  deadx(){ui.deadFor=null;draw()},
+  dead(el){const p=el.dataset.id.split('|');ui.deadFor=null;act('move',{id:p[0],to:'dead',dead_reason:DEAD[+p[1]]})},
+  copy(el){copy(el.dataset.id)},
+  ghost(){ui.ghost=!ui.ghost;draw()},
+  range(el){ui.range=el.dataset.id;draw()},
+  filter(el){ui.filter=el.dataset.id;draw()},
+  saveSetter(el){const id=el.dataset.id;act('admin_setter',{id,name:$('#n_'+id).value,role:$('#r_'+id).value,active:$('#a_'+id).checked},'Saved')},
+  addSetter(){act('admin_setter',{name:$('#n_new').value,role:$('#r_new').value},'Added')},
+  cash(el){act('admin_cash',{id:el.dataset.id,cash:$('#c_'+el.dataset.id).value},'Saved')},
+  saveHook(){const v=$('#s_hook').value.trim();if(!v)return toast('Paste the webhook URL first',true);act('admin_settings',{slack_webhook:v,site_url:location.origin},'Slack connected')},
+  async testSlack(){const r=await act('admin_test_slack');if(r)toast(r.slack==='sent'?'Test sent to Slack':r.slack==='not_configured'?'Slack is not connected yet':'Slack rejected it. Check the webhook URL.',r.slack!=='sent')},
+  saveSettings(){act('admin_settings',{dfy_link:$('#s_dfy').value,mentorship_link:$('#s_men').value,cap:$('#s_cap').value,site_url:location.origin},'Saved')}
+};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&H[el.dataset.a]){e.preventDefault();H[el.dataset.a](el)}});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.f)draft[t.dataset.f]=t.value;if(t.id==='q'){ui.q=t.value;const r=$('#rows');if(r)r.innerHTML=allRows()}});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.re&&t.value)act('admin_reassign',{id:t.dataset.re,booker_id:t.value},'Reassigned')});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='codeIn')H.enter()});
+setInterval(()=>{if(!code||document.hidden||busy)return;const a=document.activeElement;const typing=a&&['INPUT','TEXTAREA','SELECT'].includes(a.tagName);refresh(!typing&&!ui.deadFor)},15000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&code)refresh()});
+if(code)refresh();else draw();
+</script>
+</body>
+</html>
