@@ -105,6 +105,7 @@ td.num,th.num{text-align:right}
 <div id="app"></div>
 <div id="toast"></div>
 <script>
+const SITE=(location.origin+location.pathname).replace(/\/(index\.html)?$/,'');
 const API='https://dgnbxykkfnnkcfbycozu.supabase.co/functions/v1/board';
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
 let code=LS.get('de_code')||'',meId=LS.get('de_me')||'',tab=LS.get('de_tab')||'';
@@ -249,7 +250,7 @@ function allView(){
 }
 
 function adminView(){
-  const a=S.admin||{},site=a.site_url||location.origin;
+  const a=S.admin||{},site=SITE;
   const showed=S.conversations.filter(c=>c.stage==='showed');
   return `<div class="grid2"><div>
   <div class="box"><h2>Team</h2>${S.setters.map(s=>`<div class="line"><input type="text" id="n_${s.id}" value="${esc(s.name)}"><select id="r_${s.id}">${Object.keys(ROLE).map(r=>`<option value="${r}" ${s.role===r?'selected':''}>${ROLE[r]}</option>`).join('')}</select><label style="margin:0;font-weight:500"><input type="checkbox" id="a_${s.id}" ${s.active?'checked':''}> Active</label><button class="btn s" data-a="saveSetter" data-id="${s.id}">Save</button></div>`).join('')}
@@ -302,9 +303,9 @@ const H={
   saveSetter(el){const id=el.dataset.id;act('admin_setter',{id,name:$('#n_'+id).value,role:$('#r_'+id).value,active:$('#a_'+id).checked},'Saved')},
   addSetter(){act('admin_setter',{name:$('#n_new').value,role:$('#r_new').value},'Added')},
   cash(el){act('admin_cash',{id:el.dataset.id,cash:$('#c_'+el.dataset.id).value},'Saved')},
-  saveHook(){const v=$('#s_hook').value.trim();if(!v)return toast('Paste the webhook URL first',true);act('admin_settings',{slack_webhook:v,site_url:location.origin},'Slack connected')},
+  saveHook(){const v=$('#s_hook').value.trim();if(!v)return toast('Paste the webhook URL first',true);act('admin_settings',{slack_webhook:v,site_url:SITE},'Slack connected')},
   async testSlack(){const r=await act('admin_test_slack');if(r)toast(r.slack==='sent'?'Test sent to Slack':r.slack==='not_configured'?'Slack is not connected yet':'Slack rejected it. Check the webhook URL.',r.slack!=='sent')},
-  saveSettings(){act('admin_settings',{dfy_link:$('#s_dfy').value,mentorship_link:$('#s_men').value,cap:$('#s_cap').value,site_url:location.origin},'Saved')}
+  saveSettings(){act('admin_settings',{dfy_link:$('#s_dfy').value,mentorship_link:$('#s_men').value,cap:$('#s_cap').value,site_url:SITE},'Saved')}
 };
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&H[el.dataset.a]){e.preventDefault();H[el.dataset.a](el)}});
 document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.f)draft[t.dataset.f]=t.value;if(t.id==='q'){ui.q=t.value;const r=$('#rows');if(r)r.innerHTML=allRows()}});
