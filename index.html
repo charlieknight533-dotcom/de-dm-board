@@ -172,18 +172,12 @@ function handoffView(m){
   const hToday=mine.filter(c=>inR(c.created_at,'today')).length,hWeek=mine.filter(c=>inR(c.created_at,'week'));
   const bWeek=hWeek.filter(c=>c.booked_at).length;
   return `<div class="grid2"><div class="box">
-    <div class="rule"><b>Hand off the moment all three are true</b><ol><li>They are the decision maker</li><li>You know roughly where they sit on money</li><li>They asked about the next step, the price or how it works</li></ol></div>
-    <p class="note">You never send the booking link. Qualify, pass it on, open the next one.</p>
+    <div class="rule"><b>Hand off as soon as they reply and the conversation is moving</b>You don't qualify and you never send the booking link. Pass it on, open the next one.</div>
     <label>Instagram handle <em>*</em></label><input type="text" data-f="ig_handle" value="${esc(draft.ig_handle)}" placeholder="@theirhandle or paste the profile link" autocomplete="off" autocapitalize="off">
     <label>First name</label><input type="text" data-f="first_name" value="${esc(draft.first_name)}" autocomplete="off">
     <label>Came in via</label>${chips('entry_trigger')}
     <label>Goal</label>${chips('goal')}
-    <label>Capital</label>${chips('capital')}
-    <label>Credit score</label>${chips('credit')}
-    <label>Timeline</label>${chips('timeline')}
-    <label>Decision maker</label>${chips('decision_maker')}
-    <label>Where the conversation stands <em>*</em></label><textarea data-f="where_it_stands" placeholder="Two lines. What they want, what they've told you, anything they're unsure about.">${esc(draft.where_it_stands)}</textarea>
-    <label>The next message the booker should send <em>*</em></label><textarea data-f="opening_message" placeholder="Write it as Alex, so the booker can pick up without the prospect noticing a change.">${esc(draft.opening_message)}</textarea>
+    <label>Where the conversation stands <em>*</em></label><textarea data-f="where_it_stands" placeholder="Two lines. What you sent, what they replied, anything they asked.">${esc(draft.where_it_stands)}</textarea>
     <button class="btn p big" data-a="handoff">Hand off →</button>
   </div><div>
     <div class="tiles">
@@ -197,14 +191,14 @@ function handoffView(m){
 
 function card(c){
   const open=c.stage==='new'||ui.open[c.id],t=track(c),nx=NEXT[c.stage];
-  const link=t==='DFY'?S.links.dfy:S.links.mentorship;
+  const lk=c.stage==='qualified'||c.stage==='link_sent';
   let flag='';
   if(late(c))flag=`<div class="flag b">Waiting ${ago(c.assigned_at||c.created_at)} · pick this up now</div>`;
   else if(cold(c))flag=`<div class="flag w">No reply logged for ${ago(c.last_activity_at)} · parks at ${S.stale_hours}h</div>`;
   let acts='';
   if(ui.deadFor===c.id)acts=`<div class="acts">${DEAD.map((r,i)=>`<button class="btn s" data-a="dead" data-id="${c.id}|${i}">${r}</button>`).join('')}<button class="btn s q" data-a="deadx">Cancel</button></div>`;
   else if(c.stage==='booked')acts=`<div class="acts"><button class="btn p s" data-a="mv" data-id="${c.id}|showed">Showed</button><button class="btn s" data-a="mv" data-id="${c.id}|no_show">No-show</button><button class="btn s q" data-a="mv" data-id="${c.id}|link_sent">Undo</button></div>`;
-  else acts=`<div class="acts">${nx?`<button class="btn p s" data-a="mv" data-id="${c.id}|${nx[0]}">${nx[1]}</button>`:''}${c.stage!=='new'?`<button class="btn s" data-a="touch" data-id="${c.id}">They replied</button>`:''}${link&&(c.stage==='qualified'||c.stage==='link_sent')?`<button class="btn s" data-a="copy" data-id="${esc(link)}">Copy link</button>`:''}</div><div class="acts" style="margin-top:4px">${PREV[c.stage]?`<button class="btn s q" data-a="mv" data-id="${c.id}|${PREV[c.stage]}">← Back</button>`:''}<button class="btn s q" data-a="mv" data-id="${c.id}|ghosted">Ghosted</button><button class="btn s q" data-a="deadq" data-id="${c.id}">Dead</button>${c.stage!=='new'?`<button class="btn s q" data-a="open" data-id="${c.id}">${open?'Hide':'Details'}</button>`:''}</div>`;
+  else acts=`<div class="acts">${nx?`<button class="btn p s" data-a="mv" data-id="${c.id}|${nx[0]}">${nx[1]}</button>`:''}${c.stage!=='new'?`<button class="btn s" data-a="touch" data-id="${c.id}">They replied</button>`:''}${lk&&S.links.dfy?`<button class="btn s" data-a="copy" data-id="${esc(S.links.dfy)}">Copy DFY link</button>`:''}${lk&&S.links.mentorship?`<button class="btn s" data-a="copy" data-id="${esc(S.links.mentorship)}">Copy mentorship link</button>`:''}</div><div class="acts" style="margin-top:4px">${PREV[c.stage]?`<button class="btn s q" data-a="mv" data-id="${c.id}|${PREV[c.stage]}">← Back</button>`:''}<button class="btn s q" data-a="mv" data-id="${c.id}|ghosted">Ghosted</button><button class="btn s q" data-a="deadq" data-id="${c.id}">Dead</button>${c.stage!=='new'?`<button class="btn s q" data-a="open" data-id="${c.id}">${open?'Hide':'Details'}</button>`:''}</div>`;
   const facts=[c.entry_trigger&&'Via '+c.entry_trigger,c.capital,c.credit&&'Credit '+c.credit,c.decision_maker&&'DM: '+c.decision_maker,c.opener_id&&'Opened by '+nm(c.opener_id)].filter(Boolean).join(' · ');
   return `<div class="card ${late(c)?'late':cold(c)?'cold':''}">
     <div class="top"><a class="h" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a><span class="age">${ago(c.stage==='booked'?c.booked_at:c.last_activity_at)}</span></div>
@@ -283,7 +277,6 @@ const H={
   async handoff(){
     if(!(draft.ig_handle||'').trim())return toast('Add the Instagram handle',true);
     if(!(draft.where_it_stands||'').trim())return toast('Add where the conversation stands',true);
-    if(!(draft.opening_message||'').trim())return toast('Add the next message for the booker',true);
     const d=draft;const r=await act('handoff',d);
     if(r){draft={};draw();toast(r.queued?'Handed off. Every booker is full, so it is in the queue.':'Handed off to '+r.assigned_to+(r.slack==='sent'?' · posted in Slack':''))}
   },
