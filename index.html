@@ -19,7 +19,7 @@ nav button{background:none;border:0;color:#fff;opacity:.65;padding:16px 12px;bor
 nav button.on{opacity:1;border-bottom-color:#fff}
 .who{display:flex;align-items:center;gap:10px;font-size:14px;padding:8px 0}
 .who button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:6px;padding:5px 10px;font-size:13px}
-main{padding:20px;max-width:1500px;margin:0 auto}
+main{padding:20px;max-width:1760px;margin:0 auto}
 h2{font-size:16px;margin:0 0 12px}
 h3{font-size:12px;margin:0 0 8px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
 .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
@@ -47,7 +47,7 @@ textarea{min-height:76px;resize:vertical}
 .rule{background:var(--blueBg);border-radius:10px;padding:12px 14px;font-size:13.5px;margin-bottom:6px}
 .rule b{display:block;margin-bottom:4px}
 .rule ol{margin:0;padding-left:18px}
-.cols{display:grid;grid-template-columns:repeat(7,minmax(218px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.cols{display:grid;grid-template-columns:repeat(7,minmax(196px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
 .col{background:#eaecf0;border-radius:12px;padding:10px;min-height:120px}
 .col h3{display:flex;justify-content:space-between;margin:2px 4px 10px}
 .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:8px}
@@ -264,8 +264,8 @@ function leak(){
     const cell=(a,p)=>`<td class="num"><b>${a}</b>${p?`<div class="note">${Math.round(a/p*100)}%</div>`:''}</td>`;
     const lost={};list.filter(c=>c.lost_from&&(c.stage==='ghosted'||c.stage==='dead')).forEach(c=>lost[c.lost_from]=(lost[c.lost_from]||0)+1);const top=Object.entries(lost).sort((a,b)=>b[1]-a[1])[0];
     return `<tr><td><b>${esc(name)}</b></td>${cell(n)}${cell(st,n)}${cell(q,st)}${cell(l,q)}${cell(bo,l)}${cell(s,bo)}${cell(w,s)}<td>${top?LABEL[top[0]]+' ('+top[1]+')':'—'}</td><td class="num" style="${odn?'color:var(--bad);font-weight:700':''}">${odn}</td></tr>`};
-  const set=id=>S.conversations.filter(c=>(id?c.booker_id===id:c.booker_id)&&inR(c.assigned_at||c.created_at,r));
-  const odn=id=>S.conversations.filter(c=>(id?c.booker_id===id:true)&&BOARD.includes(c.stage)&&overdue(c)).length;
+  const ids=bk.map(b=>b.id),set=id=>S.conversations.filter(c=>(id?c.booker_id===id:ids.includes(c.booker_id))&&inR(c.assigned_at||c.created_at,r));
+  const odn=id=>S.conversations.filter(c=>(id?c.booker_id===id:ids.includes(c.booker_id))&&BOARD.includes(c.stage)&&overdue(c)).length;
   return `<div class="box" style="margin-bottom:18px"><div class="line" style="justify-content:space-between"><h2 style="margin:0">Where conversations are being lost</h2><div class="seg" style="margin:0">${[['today','Today'],['week','This week'],['30d','Last 30 days']].map(x=>`<button class="${r===x[0]?'on':''}" data-a="range" data-id="${x[0]}">${x[1]}</button>`).join('')}</div></div><div style="overflow-x:auto"><table><tr><th>Booker</th><th class="num">Handed off</th><th class="num">Started</th><th class="num">Ready to book</th><th class="num">Link sent</th><th class="num">Booked</th><th class="num">Showed</th><th class="num">Closed</th><th>Most lost at</th><th class="num">Overdue now</th></tr>${bk.map(b=>row(b.name,set(b.id),odn(b.id))).join('')}${bk.length>1?row('Team',set(null),odn(null)):''}${bk.length?'':'<tr><td colspan="10" class="empty">No bookers added yet.</td></tr>'}</table></div><p class="note" style="margin-top:10px">Each % is the share that made it from the step before. The smallest % is the leak.</p></div>`;
 }
 
