@@ -9,7 +9,6 @@
 :root{--bg:#f4f5f7;--card:#fff;--ink:#14181f;--mute:#6b7280;--line:#e3e6eb;--brand:#0f2a43;--go:#0a7d4f;--goBg:#e7f6ee;--warn:#b45309;--warnBg:#fff4e0;--bad:#b42318;--badBg:#fdecea;--blue:#1d4ed8;--blueBg:#e8efff}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-a{color:inherit}
 button{font:inherit;cursor:pointer}
 header{background:var(--brand);color:#fff;padding:0 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
 .logo{font-weight:700;font-size:16px;padding:14px 0;white-space:nowrap}
@@ -19,11 +18,12 @@ nav button{background:none;border:0;color:#fff;opacity:.65;padding:16px 12px;bor
 nav button.on{opacity:1;border-bottom-color:#fff}
 .who{display:flex;align-items:center;gap:10px;font-size:14px;padding:8px 0}
 .who button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:6px;padding:5px 10px;font-size:13px}
-main{padding:20px;max-width:1760px;margin:0 auto}
+main{padding:20px;max-width:1500px;margin:0 auto}
 h2{font-size:16px;margin:0 0 12px}
-h3{font-size:12px;margin:0 0 8px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+h3{font-size:12px;margin:0 0 10px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
 .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
-.grid2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+.sec{margin-top:18px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .tile .n{font-size:28px;font-weight:700;line-height:1.1}
@@ -31,74 +31,60 @@ h3{font-size:12px;margin:0 0 8px;color:var(--mute);text-transform:uppercase;lett
 .tile .l{font-size:13px;color:var(--mute);margin-top:2px}
 .tile.good .n{color:var(--go)}.tile.warn .n{color:var(--warn)}.tile.bad .n{color:var(--bad)}
 label{display:block;font-weight:600;font-size:13px;margin:14px 0 6px}
-label em{font-style:normal;color:var(--bad)}
-input[type=text],input[type=number],textarea,select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px 12px;font:inherit;background:#fff;color:var(--ink)}
-input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px}
-textarea{min-height:76px;resize:vertical}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid #cfd4dc;background:#fff;border-radius:999px;padding:6px 12px;font-size:13.5px}
-.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+input[type=text],input[type=number],select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px 12px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px}
 .btn{border:1px solid #cfd4dc;background:#fff;border-radius:8px;padding:7px 12px;font-weight:600;font-size:13.5px;color:var(--ink)}
 .btn.p{background:var(--go);border-color:var(--go);color:#fff}
 .btn.d{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.r{background:var(--bad);border-color:var(--bad);color:#fff}
 .btn.big{padding:12px 18px;font-size:15px;width:100%;margin-top:18px}
+.btn.xl{padding:11px 8px;font-size:14.5px;flex:1}
 .btn.s{padding:4px 9px;font-size:12.5px}
-.btn.q{border-color:transparent;background:none;color:var(--mute);padding:7px 6px}
-.rule{background:var(--blueBg);border-radius:10px;padding:12px 14px;font-size:13.5px;margin-bottom:6px}
-.rule b{display:block;margin-bottom:4px}
-.rule ol{margin:0;padding-left:18px}
-.cols{display:grid;grid-template-columns:repeat(7,minmax(196px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
-.col{background:#eaecf0;border-radius:12px;padding:10px;min-height:120px}
-.col h3{display:flex;justify-content:space-between;margin:2px 4px 10px}
-.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:8px}
-.card.cold{border-left:4px solid var(--warn)}
-.card.late{border-left:4px solid var(--bad)}
-.card .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-.card .h{font-weight:700;text-decoration:none;color:var(--blue);word-break:break-all}
-.card .age{font-size:12px;color:var(--mute);white-space:nowrap}
-.card .sub{font-size:13px;color:var(--mute);margin-top:2px}
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.tag{font-size:11.5px;background:#eef0f3;border-radius:5px;padding:2px 6px;font-weight:600}
-.tag.dfy{background:var(--goBg);color:var(--go)}.tag.m{background:var(--blueBg);color:var(--blue)}
-.flag{font-size:12px;font-weight:700;margin-top:6px}
-.flag.w{color:var(--warn)}.flag.b{color:var(--bad)}
-.say{background:#f6f7f9;border-radius:8px;padding:8px 10px;font-size:13.5px;margin-top:8px;white-space:pre-wrap;word-break:break-word}
-.say b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin-bottom:2px}
+.btn.q{border-color:transparent;background:none;color:var(--mute);padding:6px 6px}
+.addbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.addbar input{flex:1;min-width:220px;font-size:16px;padding:12px 14px}
+.addbar .btn{padding:12px 16px;font-size:15px}
+.live{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid #cbd2dc;border-radius:12px;padding:14px}
+.card.recv{border-left-color:var(--warn)}
+.card.open{border-left-color:var(--bad);background:#fffafa}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.h{font-weight:700;text-decoration:none;color:var(--blue);word-break:break-all}
+.clock{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:10px}
+.dir{font-size:13px;font-weight:600;color:var(--mute);margin-top:2px}
+.dir.recv{color:var(--warn)}.dir.open{color:var(--bad)}
 .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
-.empty{color:var(--mute);font-size:13px;padding:8px 4px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid #eef0f3}
+.row:last-child{border-bottom:0}
+.row .t{font-variant-numeric:tabular-nums;font-weight:700;min-width:64px}
+.row .sp{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.note{font-size:13px;color:var(--mute)}
+.empty{color:var(--mute);font-size:13px;padding:6px 0}
+.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:#eef0f3;white-space:nowrap}
+.pill.talking,.pill.qualifying,.pill.qualified,.pill.link_sent{background:var(--blueBg);color:var(--blue)}
+.pill.booked{background:var(--goBg);color:var(--go)}.pill.ghosted{background:var(--warnBg);color:var(--warn)}
+.tag{font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 6px;background:#eef0f3}
+.tag.b{background:var(--badBg);color:var(--bad)}.tag.w{background:var(--warnBg);color:var(--warn)}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th{text-align:left;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line)}
 td{padding:10px;border-bottom:1px solid #eef0f3;vertical-align:middle}
 td.num,th.num{text-align:right}
+td select{width:auto;padding:5px 8px}
 .rank{font-weight:700;color:var(--mute);width:34px}
-.big{font-size:22px;font-weight:700}
-.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:#eef0f3;white-space:nowrap}
-.next{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;margin-top:8px;padding:6px 8px;border-radius:7px;background:#f1f3f6}.next span{white-space:nowrap;font-weight:700}.next.od{background:var(--badBg);color:var(--bad)}
-.card input[type=datetime-local]{border:1px solid #cfd4dc;border-radius:8px;padding:6px 8px;font:inherit;width:100%}
-.pill.bench{background:#eceef2;color:#4b5563}.pill.qualifying{background:var(--blueBg);color:var(--blue)}.pill.won{background:var(--goBg);color:var(--go)}.pill.followup{background:var(--warnBg);color:var(--warn)}
-.pill.new,.pill.queued{background:var(--badBg);color:var(--bad)}.pill.talking,.pill.qualified,.pill.link_sent{background:var(--blueBg);color:var(--blue)}
-.pill.booked,.pill.showed{background:var(--goBg);color:var(--go)}.pill.ghosted,.pill.no_show{background:var(--warnBg);color:var(--warn)}
-.bar{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:5px}
-.bar i{display:block;height:100%;background:var(--go)}
-.bar i.full{background:var(--bad)}
-.cap{margin-bottom:12px;font-size:14px}
-.cap .r{display:flex;justify-content:space-between;font-weight:600}
+.bign{font-size:22px;font-weight:700}
 .seg{display:inline-flex;border:1px solid #cfd4dc;border-radius:8px;overflow:hidden;margin-bottom:14px}
 .seg button{border:0;background:#fff;padding:7px 14px;font-weight:600;font-size:13.5px;color:var(--mute)}
 .seg button.on{background:var(--brand);color:#fff}
 .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
 .line input[type=text]{flex:1;min-width:140px}
 .line select{width:auto}
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start}
 .gate{max-width:420px;margin:12vh auto;padding:0 16px}
 .gate .box{padding:26px}
 .people{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
 .people button{background:#fff;border:1px solid #cfd4dc;border-radius:10px;padding:16px 10px;font-weight:700}
 .people button small{display:block;font-weight:500;color:var(--mute);margin-top:2px}
-.note{font-size:13px;color:var(--mute)}
-.alert{background:var(--warnBg);color:var(--warn);border-radius:10px;padding:10px 14px;font-weight:600;font-size:14px;margin-bottom:14px}
-.sec{margin-top:20px}
-.ctr{display:flex;align-items:center;gap:10px}
-.ctr button{width:34px;height:34px;border-radius:8px;border:1px solid #cfd4dc;background:#fff;font-size:18px;font-weight:700}
+.alert{background:var(--badBg);color:var(--bad);border-radius:10px;padding:10px 14px;font-weight:600;font-size:14px;margin-bottom:14px}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14181f;color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:90vw}
 #toast.on{opacity:1}#toast.err{background:var(--bad)}
 @media(max-width:900px){.grid2{grid-template-columns:1fr}main{padding:14px}}
@@ -112,65 +98,38 @@ const SITE=(location.origin+location.pathname).replace(/\/(index\.html)?$/,'');
 const API='https://dgnbxykkfnnkcfbycozu.supabase.co/functions/v1/board';
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
 let code=LS.get('de_code')||'',meId=LS.get('de_me')||'',tab=LS.get('de_tab')||'';
-let S=null,busy=false,draft={},ui={open:{},deadFor:null,bookFor:null,bookVal:'',range:'week',q:'',filter:'live',ghost:false};
+let S=null,busy=false,skew=0,sig='',draft={ig:''},ui={deadFor:null,range:'week',q:'',filter:'open'};
 try{const qp=new URLSearchParams(location.search);if(qp.get('k')){code=qp.get('k');LS.set('de_code',code);history.replaceState(null,'',location.pathname)}}catch(e){}
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ACTIVE=['new','talking','qualifying','qualified','link_sent'];
-const BOARD=[...ACTIVE,'booked','followup','no_show'];
-const COLS=['new','talking','qualifying','qualified','link_sent','booked','after'];
-const LABEL={queued:'Queued',new:'New handoff',talking:'Discovery',qualifying:'Qualifying',qualified:'Ready to book',link_sent:'Link sent',bench:'On the bench',booked:'Booked',after:'After the call',won:'Closed',followup:'Post-call follow-up',showed:'Showed',no_show:'No-show',ghosted:'Ghosted',dead:'Dead'};
-const NEXT={new:['talking','Start conversation'],talking:['qualifying','Qualifying'],qualifying:['qualified','Ready to book'],qualified:['link_sent','Link sent']};
-const PREV={talking:'new',qualifying:'talking',qualified:'qualifying',link_sent:'qualified'};
-const DEAD=['No money','Not interested','Not the decision maker','Not a fit','Spam / wrong person'];
-const CH={entry_trigger:['Keyword','Story reply','Follow DM','Comment','"That\'s me" vote','Other'],goal:['First deal','Building a portfolio'],capital:['Under $5K','$5–15K','$15–30K','$30K+'],credit:['650+','Under 650','Not sure'],timeline:['Now','1–3 months','3–6 months','Just looking'],decision_maker:['Yes','No, someone else involved']};
-const ROLE={opener:'Opener',booker:'Booker',manager:'Manager'};
+const OPEN=['talking','qualifying','qualified','link_sent'];
+const LABEL={talking:'Discovery',qualifying:'Qualifying',qualified:'Ready to book',link_sent:'Link sent',booked:'Booked',ghosted:'Gone quiet',dead:'Dead'};
+const DEAD=['No money','Not interested','Not the decision maker','Not a fit','Stopped replying','Spam / wrong person'];
+const ROLE={setter:'Setter',booker:'Setter',opener:'Setter',manager:'Manager'};
 
 const dfmt=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Chicago'});
 const dayOf=ts=>dfmt.format(new Date(ts));
-function rangeStart(r){const t=dayOf(S.now);if(r==='today')return t;const d=new Date(t+'T00:00:00Z');if(r==='week')d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));else d.setUTCDate(d.getUTCDate()-29);return d.toISOString().slice(0,10)}
+const nowMs=()=>Date.now()+skew;
+function rangeStart(r){const t=dayOf(nowMs());if(r==='today')return t;const d=new Date(t+'T00:00:00Z');if(r==='week')d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));else d.setUTCDate(d.getUTCDate()-29);return d.toISOString().slice(0,10)}
 const inR=(ts,r)=>!!ts&&dayOf(ts)>=rangeStart(r);
-const mins=ts=>Math.max(0,(new Date(S.now)-new Date(ts))/60000);
-function ago(ts){const m=mins(ts);if(m<60)return Math.round(m)+'m';if(m<1440)return Math.round(m/60)+'h';return Math.round(m/1440)+'d'}
+const el=c=>Math.max(0,nowMs()-Date.parse(c.last_activity_at));
+// Stopwatch text: minutes and seconds, then hours, then days.
+function fmt(ms){const s=Math.floor(ms/1000),p=n=>String(n).padStart(2,'0');if(s<3600)return p(Math.floor(s/60))+':'+p(s%60);if(s<86400)return Math.floor(s/3600)+'h '+p(Math.floor(s%3600/60))+'m';return Math.floor(s/86400)+'d '+Math.floor(s%86400/3600)+'h'}
 const nm=id=>{const s=S.setters.find(x=>x.id===id);return s?s.name:'—'};
 const me=()=>S&&S.setters.find(s=>s.id===meId&&s.active);
-const track=c=>c.capital==='$30K+'&&c.credit==='650+'?'DFY':(c.capital&&(c.capital!=='$30K+'||c.credit==='Under 650')?'Mentorship':'');
-const load=id=>S.conversations.filter(c=>c.booker_id===id&&ACTIVE.includes(c.stage)).length;
-const HR=3600e3,nowMs=()=>+new Date(S.now);
-const tl=ms=>{const m=Math.abs(ms)/60000;return m<60?Math.max(1,Math.round(m))+'m':m<1440?Math.round(m/60)+'h':Math.round(m/1440)+'d'};
-const callStr=t=>new Date(t).toLocaleString([],{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-const callToday=c=>c.stage==='booked'&&c.call_at&&new Date(c.call_at).toDateString()===new Date(S.now).toDateString();
-function fu(c,first){const la=+new Date(c.last_activity_at),t=c.touches||0;
-  if(t===0)return{t:'Follow up if they go quiet',due:la+first};
-  if(t===1)return{t:'Send follow-up 2 of 3',due:la+20*HR};
-  if(t===2)return{t:'Send follow-up 3 of 3',due:la+48*HR};
-  return{t:'3 follow-ups sent. Parks itself if no reply',due:la+24*HR,calm:true}}
-// The one thing the setter owes on this conversation, and when it is due.
-function na(c){const la=+new Date(c.last_activity_at),t=c.touches||0,now=nowMs();
-  switch(c.stage){
-    case 'new':return{t:'Send your first message',due:+new Date(c.assigned_at||c.created_at)+15*60e3};
-    case 'talking':case 'qualifying':return fu(c,4*HR);
-    case 'qualified':return t?fu(c,4*HR):{t:'Send the booking link',due:la+15*60e3};
-    case 'link_sent':return fu(c,2*HR);
-    case 'booked':{const ba=+new Date(c.booked_at||c.last_activity_at),ca=c.call_at?+new Date(c.call_at):0,p=c.precall||0;
-      if(!ca)return{t:'Add the call time',due:ba+HR};
-      if(now>=ca)return{t:'Log what happened on the call',due:ca+HR};
-      if(now>=ca-6*HR&&!(p&4))return{t:'Send the day-of confirm',due:ca-2*HR};
-      if(!(p&1))return{t:'Send the confirmation DM',due:ba+HR};
-      if(!(p&2)&&ba<ca-24*HR)return{t:'Send the day-before touch',due:ca-24*HR};
-      if(!(p&4))return{t:'Send the day-of confirm',due:ca-2*HR};
-      return{t:'Pre-call touches done',due:ca,calm:true}}
-    case 'followup':return{t:'Post-call follow-up '+(t+1),due:la+24*HR};
-    case 'no_show':return{t:'Rebook attempt '+(t+1),due:la+(t?24*HR:HR)};
-  }
-  return null}
-const overdue=c=>{const n=na(c);return !!n&&!n.calm&&nowMs()>n.due};
-const cold=overdue;
-const late=c=>c.stage==='new'&&mins(c.assigned_at||c.created_at)>=15;
-const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+const isOpen=c=>OPEN.includes(c.stage);
+const isLive=c=>isOpen(c)&&el(c)<S.cfg.bench*60e3;
+const isBench=c=>isOpen(c)&&!isLive(c);
+const waiting=c=>isOpen(c)&&c.last_dir==='received';
+// Takeover: the prospect's message has sat unanswered past the limit.
+const takeable=c=>waiting(c)&&el(c)>=S.cfg.take*60e3&&!(S.cfg.protect&&c.stage==='link_sent');
+const setters=()=>S.setters.filter(s=>s.active&&s.role!=='manager');
+const mineOf=id=>S.conversations.filter(c=>c.booker_id===id);
+const bucket=c=>(isLive(c)?0:2)+(takeable(c)?1:0);
+const sigNow=()=>S?S.conversations.filter(isOpen).map(c=>c.id+bucket(c)).join():'';
 
-function toast(t,err){const el=$('#toast');el.textContent=t;el.className='on'+(err?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>el.className='',err?4500:2200)}
+function toast(t,err){const e=$('#toast');e.textContent=t;e.className='on'+(err?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',err?4500:2000)}
 async function api(action,data){
   const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({action,code,setter_id:meId||null},data||{}))});
   const j=await r.json().catch(()=>({error:'Bad response'}));
@@ -178,192 +137,139 @@ async function api(action,data){
   return j;
 }
 async function refresh(render){
-  try{S=await api('state');if(render!==false)draw()}
+  try{S=await api('state');skew=Date.parse(S.now)-Date.now();if(render!==false)draw()}
   catch(e){if(e.status===401){code='';LS.set('de_code',null);S=null;draw();toast('Wrong access code',true)}else if(render!==false)toast('Connection problem, retrying',true)}
 }
 async function act(action,data,msg){
   if(busy)return null;busy=true;
   try{const r=await api(action,data);if(msg)toast(msg);await refresh();return r}
-  catch(e){toast(e.message,true);return null}
+  catch(e){toast(e.message,true);await refresh();return null}
   finally{busy=false}
 }
-function copy(t){const done=()=>toast('Copied');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>fallback())}else fallback();function fallback(){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){}a.remove()}}
+function copy(t){const done=()=>toast('Copied');if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,()=>{});}
+
+/* ---------- pieces ---------- */
+const B=(a,id,txt,cls)=>`<button class="btn ${cls||'s'}" data-a="${a}" data-id="${id}">${txt}</button>`;
+const ig=c=>`<a class="h" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a>`;
+const clock=(c,cls)=>`<span class="${cls||'t'}" data-ts="${Date.parse(c.last_activity_at)}">${fmt(el(c))}</span>`;
+function dirText(c,mine){const t=takeable(c);if(c.last_dir==='received')return `<span class="dir ${t?'open':'recv'}">${t?'Open to take over · ':''}${mine?'They replied · your move':'They replied · no answer yet'}</span>`;return `<span class="dir">${mine?'You sent · waiting on them':'Setter sent · waiting on them'}</span>`}
+function stageBtns(c){const i=OPEN.indexOf(c.stage),nx=OPEN[i+1],pv=OPEN[i-1];return `${nx?B('mv',c.id+'|'+nx,LABEL[nx]+' →'):''}${B('mv',c.id+'|booked','Booked ✓','s p')}${pv?B('mv',c.id+'|'+pv,'←','s q'):''}${B('deadq',c.id,'Dead','s q')}`}
+const deadRow=c=>`<div class="acts">${DEAD.map((r,i)=>B('dead',c.id+'|'+i,r)).join('')}${B('deadx','','Cancel','s q')}</div>`;
+function card(c){
+  const t=takeable(c);
+  return `<div class="card ${t?'open':c.last_dir==='received'?'recv':''}">
+    <div class="top">${ig(c)}<span class="pill ${c.stage}">${LABEL[c.stage]}</span></div>
+    ${clock(c,'clock')}<div>${dirText(c,true)}</div>
+    <div class="acts">${B('ping',c.id+'|sent','Message sent','xl d')}${B('ping',c.id+'|received','Message received','xl')}</div>
+    ${ui.deadFor===c.id?deadRow(c):`<div class="acts">${stageBtns(c)}</div>`}
+  </div>`;
+}
+function benchRow(c){
+  return `<div class="row">${ig(c)}<span class="pill ${c.stage}">${LABEL[c.stage]}</span>${clock(c)}${dirText(c,true)}<span class="sp">${ui.deadFor===c.id?deadRow(c):B('ping',c.id+'|sent','Sent','s d')+B('ping',c.id+'|received','Received')+stageBtns(c)}</span></div>`;
+}
+function tile(n,l,cls){return `<div class="tile ${cls||''}"><div class="n">${n}</div><div class="l">${l}</div></div>`}
+function speed(id,r){const rows=S.counts.filter(c=>c.setter_id===id&&c.day>=rangeStart(r)),n=rows.reduce((a,c)=>a+c.replies,0),f=rows.reduce((a,c)=>a+c.fast,0),s=rows.reduce((a,c)=>a+Number(c.reply_secs),0);return{n,pct:n?Math.round(f/n*100)+'%':'—',avg:n?fmt(s/n*1000):'—'}}
 
 /* ---------- screens ---------- */
-function gate(){return `<div class="gate"><div class="box"><h2>DM Board · Deal Engine</h2><p class="note">Enter the team access code to get in. You only do this once on this device.</p><label>Access code</label><input type="text" id="codeIn" autocomplete="off" autocapitalize="off"><button class="btn d big" data-a="enter">Enter</button></div></div>`}
-function who(){const ppl=S.setters.filter(s=>s.active);return `<div class="gate" style="max-width:560px"><div class="box"><h2>Who are you?</h2><p class="note">Pick your name. The board remembers it on this device.</p><div class="people">${ppl.map(s=>`<button data-a="pick" data-id="${s.id}">${esc(s.name)}<small>${ROLE[s.role]}</small></button>`).join('')}</div>${ppl.length<2?'<p class="note" style="margin-top:14px">No setters added yet. Charlie adds them in the Manager tab.</p>':''}</div></div>`}
-function tabsFor(m){const t=m.role==='opener'?[['handoff','Hand off']]:m.role==='booker'?[['board','My board']]:[['all','Overview'],['handoff','Hand off']];t.push(['lb','Leaderboard']);if(m.role!=='manager')t.push(['all','All conversations']);if(S.is_admin)t.push(['admin','Manager']);return t}
+function gate(){return `<div class="gate"><div class="box"><h2>DM Board · Deal Engine</h2><p class="note">Enter the team access code. You only do this once on this device.</p><label>Access code</label><input type="text" id="codeIn" autocomplete="off" autocapitalize="off"><button class="btn d big" data-a="enter">Enter</button></div></div>`}
+function who(){const ppl=S.setters.filter(s=>s.active);return `<div class="gate" style="max-width:560px"><div class="box"><h2>Who are you?</h2><p class="note">Pick your name. The board remembers it on this device.</p><div class="people">${ppl.map(s=>`<button data-a="pick" data-id="${s.id}">${esc(s.name)}<small>${ROLE[s.role]}</small></button>`).join('')}</div></div></div>`}
+function tabsFor(m){const t=m.role==='manager'?[['team','Team']]:[['mine','My conversations'],['team','Team']];t.push(['lb','Leaderboard'],['all','Who has what']);if(S.is_admin)t.push(['admin','Manager']);return t}
 function shell(m){return `<header><div class="logo">DM Board <span>· Deal Engine</span></div><nav>${tabsFor(m).map(t=>`<button class="${t[0]===tab?'on':''}" data-a="tab" data-id="${t[0]}">${t[1]}</button>`).join('')}</nav><div class="who"><span>${esc(m.name)} · ${ROLE[m.role]}</span><button data-a="switch">Switch</button></div></header>`}
-function tile(n,l,cls){return `<div class="tile ${cls||''}"><div class="n">${n}</div><div class="l">${l}</div></div>`}
-function chips(f){return `<div class="chips">${CH[f].map((v,i)=>`<button type="button" class="chip ${draft[f]===v?'on':''}" data-a="chip" data-id="${f}|${i}">${esc(v)}</button>`).join('')}</div>`}
-function capacity(){const bk=S.setters.filter(s=>s.active&&s.role==='booker');const q=S.conversations.filter(c=>c.stage==='queued');
-  return `<h3>Booker capacity</h3>${bk.length?bk.map(b=>{const n=load(b.id);return `<div class="cap"><div class="r"><span>${esc(b.name)}</span><span>${n}/${S.cap}</span></div><div class="bar"><i class="${n>=S.cap?'full':''}" style="width:${Math.min(100,n/S.cap*100)}%"></i></div></div>`}).join(''):'<div class="empty">No bookers added yet, so handoffs wait in the queue.</div>'}${q.length?`<div class="alert">${q.length} waiting in the queue · oldest ${ago(q[q.length-1].created_at)}</div>`:''}`}
 
-function handoffView(m){
-  const mine=S.conversations.filter(c=>c.opener_id===m.id);
-  const today=dayOf(S.now),cnt=S.counts.find(c=>c.setter_id===m.id&&c.day===today);
-  const hToday=mine.filter(c=>inR(c.created_at,'today')).length,hWeek=mine.filter(c=>inR(c.created_at,'week'));
-  const bWeek=hWeek.filter(c=>c.booked_at).length;
-  return `<div class="grid2"><div class="box">
-    <div class="rule"><b>Hand off as soon as they reply and the conversation is moving</b>You don't qualify and you never send the booking link. Pass it on, open the next one.</div>
-    <label>Instagram handle <em>*</em></label><input type="text" data-f="ig_handle" value="${esc(draft.ig_handle)}" placeholder="@theirhandle or paste the profile link" autocomplete="off" autocapitalize="off">
-    <label>First name</label><input type="text" data-f="first_name" value="${esc(draft.first_name)}" autocomplete="off">
-    <label>Came in via</label>${chips('entry_trigger')}
-    <label>Goal</label>${chips('goal')}
-    <label>Where the conversation stands <em>*</em></label><textarea data-f="where_it_stands" placeholder="Two lines. What you sent, what they replied, anything they asked.">${esc(draft.where_it_stands)}</textarea>
-    <button class="btn p big" data-a="handoff">Hand off →</button>
-  </div><div>
-    <div class="tiles">
-      <div class="tile"><div class="ctr"><button data-a="opened" data-id="-1">−</button><div class="n">${cnt?cnt.opened:0}</div><button data-a="opened" data-id="1">+</button></div><div class="l">Conversations opened today</div></div>
-      ${tile(hToday,'Handoffs today')}${tile(hWeek.length,'Handoffs this week')}${tile(bWeek,'Booked from my handoffs this week',bWeek?'good':'')}
-    </div>
-    <div class="box">${capacity()}</div>
-    <div class="box sec"><h3>My recent handoffs</h3>${mine.length?`<table>${mine.slice(0,15).map(c=>`<tr><td><b>@${esc(c.ig_handle)}</b></td><td><span class="pill ${c.stage}">${LABEL[c.stage]}</span></td><td>${c.booker_id?esc(nm(c.booker_id)):'Queue'}</td><td class="num note">${ago(c.created_at)}</td></tr>`).join('')}</table>`:'<div class="empty">Nothing handed off yet.</div>'}</div>
-  </div></div>`;
+function mineView(m){
+  const mine=mineOf(m.id),live=mine.filter(isLive).sort((a,b)=>(b.last_dir==='received')-(a.last_dir==='received')||el(b)-el(a)),bench=mine.filter(isBench).sort((a,b)=>el(a)-el(b));
+  const wait=mine.filter(waiting).length,risk=mine.filter(takeable).length,bT=mine.filter(c=>inR(c.booked_at,'today')).length,bW=mine.filter(c=>c.stage==='booked'&&inR(c.booked_at,'week')),sp=speed(m.id,'today'),cap=S.cfg.cap;
+  return `<div class="tiles">${tile(`${live.length}<small>/${cap}</small>`,'Live conversations',live.length>cap?'bad':live.length===cap?'good':'')}${tile(bench.length,'On the bench')}${tile(wait,'Waiting on your reply',risk?'bad':wait?'warn':'')}${tile(bT,'Booked today',bT?'good':'')}${tile(mine.filter(c=>inR(c.booked_at,'week')).length,'Booked this week')}${tile(sp.pct,`Replies inside ${S.cfg.take} min today`)}</div>
+  ${risk?`<div class="alert">${risk} of your conversations ${risk===1?'has':'have'} gone ${S.cfg.take}+ minutes without a reply. Another setter can take ${risk===1?'it':'them'} over.</div>`:''}
+  <div class="addbar"><input type="text" id="addIg" data-f="ig" value="${esc(draft.ig)}" placeholder="New conversation: @handle or paste the profile link" autocomplete="off" autocapitalize="off">${B('add','received','+ They messaged me','d')}${B('add','sent','+ I messaged them',' ')}</div>
+  <h3>Live · ${live.length} of ${cap}${live.length>cap?' · over the limit':''}</h3>
+  ${live.length?`<div class="live">${live.map(card).join('')}</div>`:`<div class="box empty">No live conversations. Add one above. A conversation stays live for ${S.cfg.bench} minutes after the last message.</div>`}
+  <div class="box sec"><h3>Bench · ${bench.length} · quiet for ${S.cfg.bench}+ minutes, still yours to check</h3>${bench.map(benchRow).join('')||'<div class="empty">Nothing on the bench.</div>'}</div>
+  <div class="box sec"><h3>Booked this week · ${bW.length}</h3>${bW.map(c=>`<div class="row">${ig(c)}<span class="pill booked">Booked</span><span class="note">${new Date(c.booked_at).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}</span><span class="sp">${B('mv',c.id+'|link_sent','Undo','s q')}</span></div>`).join('')||'<div class="empty">None yet this week.</div>'}</div>`;
 }
 
-function card(c){
-  const open=c.stage==='new'||ui.open[c.id],n=na(c),od=overdue(c),nx=NEXT[c.stage],t=c.touches||0,lk=c.stage==='qualified'||c.stage==='link_sent';
-  const due=n?`<div class="next ${od?'od':''}"><b>${esc(n.t)}</b><span>${n.calm?'':od?'OVERDUE '+tl(nowMs()-n.due):'in '+tl(n.due-nowMs())}</span></div>`:'';
-  const b=(a,id,txt,cls)=>`<button class="btn s ${cls||''}" data-a="${a}" data-id="${id}">${txt}</button>`;
-  const canBench=ACTIVE.includes(c.stage)&&c.stage!=='new';
-  const tail=`${canBench?b('mv',c.id+'|bench','Bench','q'):b('mv',c.id+'|ghosted','Ghosted','q')}${b('deadq',c.id,'Dead','q')}${c.stage!=='new'?b('open',c.id,open?'Hide':'Details','q'):''}`;
-  const chase=b('touch',c.id,'They replied')+b('followed',c.id,`I followed up (${Math.min(t,3)}/3)`);
-  let acts='';
-  if(ui.deadFor===c.id)acts=`<div class="acts">${DEAD.map((r,i)=>b('dead',c.id+'|'+i,r)).join('')}${b('deadx','','Cancel','q')}</div>`;
-  else if(ui.bookFor===c.id)acts=`<div class="acts"><input type="datetime-local" id="when_${c.id}" data-bk="1" value="${esc(ui.bookVal||'')}">${b('bookSave',c.id,'Save call time','p')}${c.stage==='booked'?'':b('bookSkip',c.id,'Booked, no time yet')}${b('bookX','','Cancel','q')}</div>`;
-  else if(c.stage==='booked'){const p=c.precall||0;
-    acts=`<div class="chips" style="margin-top:8px">${[[1,'Confirmation DM'],[2,'Day-before touch'],[4,'Day-of confirm']].map(x=>`<button class="chip ${p&x[0]?'on':''}" data-a="pre" data-id="${c.id}|${x[0]}">${p&x[0]?'✓ ':''}${x[1]}</button>`).join('')}</div><div class="acts">${b('mv',c.id+'|won','Closed','p')}${b('mv',c.id+'|followup','Showed, not closed')}${b('mv',c.id+'|no_show','No-show')}</div><div class="acts" style="margin-top:4px">${b('bookq',c.id,c.call_at?'Change time':'Set call time','q')}${b('mv',c.id+'|link_sent','Undo','q')}${b('deadq',c.id,'Dead','q')}${b('open',c.id,open?'Hide':'Details','q')}</div>`}
-  else if(c.stage==='followup')acts=`<div class="acts">${chase}${b('mv',c.id+'|won','Closed','p')}</div><div class="acts" style="margin-top:4px">${tail}</div>`;
-  else if(c.stage==='no_show')acts=`<div class="acts">${b('bookq',c.id,'Rebooked','p')}${chase}</div><div class="acts" style="margin-top:4px">${tail}</div>`;
-  else acts=`<div class="acts">${nx?b('mv',c.id+'|'+nx[0],nx[1],'p'):''}${c.stage==='link_sent'?b('bookq',c.id,'Booked ✓','p'):''}${c.stage!=='new'?chase:''}${lk&&S.links.dfy?b('copy',esc(S.links.dfy),'Copy DFY link'):''}${lk&&S.links.mentorship?b('copy',esc(S.links.mentorship),'Copy mentorship link'):''}</div><div class="acts" style="margin-top:4px">${PREV[c.stage]?b('mv',c.id+'|'+PREV[c.stage],'← Back','q'):''}${tail}</div>`;
-  const facts=[c.entry_trigger&&'Via '+c.entry_trigger,c.opener_id&&'Opened by '+nm(c.opener_id),'Handed off '+ago(c.created_at)+' ago'].filter(Boolean).join(' · ');
-  return `<div class="card ${od?'late':''}">
-    <div class="top"><a class="h" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a><span class="age">${ago(c.last_activity_at)}</span></div>
-    ${c.first_name?`<div class="sub">${esc(c.first_name)}</div>`:''}
-    <div class="tags">${callToday(c)?'<span class="tag dfy">CALL TODAY</span>':''}${c.stage==='followup'||c.stage==='no_show'?`<span class="tag">${LABEL[c.stage]}</span>`:''}${c.stage==='booked'&&c.call_at?`<span class="tag m">${esc(callStr(c.call_at))}</span>`:''}${c.goal?`<span class="tag">${esc(c.goal)}</span>`:''}</div>
-    ${due}
-    ${open?`${c.where_it_stands?`<div class="say"><b>Where it stands</b>${esc(c.where_it_stands)}</div>`:''}<div class="sub" style="margin-top:8px">${esc(facts)}</div>`:''}
-    ${acts}</div>`;
-}
-function boardView(m){
-  const mine=S.conversations.filter(c=>c.booker_id===m.id),live=mine.filter(c=>BOARD.includes(c.stage));
-  const n=load(m.id),bT=mine.filter(c=>inR(c.booked_at,'today')).length,bW=mine.filter(c=>inR(c.booked_at,'week')).length;
-  const b30=mine.filter(c=>inR(c.booked_at,'30d')),sh=b30.filter(c=>c.showed_at).length,ns=b30.filter(c=>c.no_show_at&&!c.showed_at).length;
-  const od=live.filter(overdue).sort((a,b)=>na(a).due-na(b).due),queue=S.conversations.filter(c=>c.stage==='queued').slice().reverse(),gh=mine.filter(c=>c.stage==='ghosted'),bn=mine.filter(c=>c.stage==='bench').sort((a,b)=>new Date(a.last_activity_at)-new Date(b.last_activity_at));
-  const inCol=s=>live.filter(c=>s==='after'?(c.stage==='followup'||c.stage==='no_show'):c.stage===s).sort((a,b)=>s==='booked'?(+new Date(a.call_at||8.64e15))-(+new Date(b.call_at||8.64e15)):na(a).due-na(b).due);
-  return `<div class="tiles">${tile(`${n}<small>/${S.cap}</small>`,'Active conversations',n>=S.cap?'bad':'')}${tile(od.length,'Overdue right now',od.length?'bad':'good')}${tile(`${bT}<small>/2</small>`,'Booked today',bT>=2?'good':'')}${tile(bW,'Booked this week')}${tile(bn.length,'On the bench')}${tile(mine.filter(callToday).length,'Calls today')}${tile(sh+ns?Math.round(sh/(sh+ns)*100)+'%':'—','Show rate, last 30 days')}</div>
-  <div class="box" style="margin-bottom:16px"><h3>Do now (${od.length})</h3>${od.length?od.map(c=>`<div class="line"><a href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:none">@${esc(c.ig_handle)}</a><span>${esc(na(c).t)}</span><span class="pill ${c.stage}">${LABEL[c.stage]}</span><b style="color:var(--bad);margin-left:auto">overdue ${tl(nowMs()-na(c).due)}</b></div>`).join(''):'<div class="note">Nothing overdue. Every conversation has had its next touch.</div>'}</div>
-  ${queue.length?`<div class="alert">${queue.length} waiting in the queue. ${n>=S.cap?'Clear a slot to take one.':''}</div><div class="box" style="margin-bottom:16px"><h3>Queue · oldest first</h3>${queue.map(c=>`<div class="line"><b>@${esc(c.ig_handle)}</b><span class="note">${esc(c.first_name||'')} · waiting ${ago(c.created_at)}</span><button class="btn p s" data-a="claim" data-id="${c.id}">Claim</button></div>`).join('')}</div>`:''}
-  <div class="cols">${COLS.map(s=>{const list=inCol(s);return `<div class="col"><h3><span>${LABEL[s]}</span><span>${list.length}</span></h3>${list.map(card).join('')||'<div class="empty">Empty</div>'}</div>`}).join('')}</div>
-  <div class="box sec"><h3>On the bench (${bn.length}) · not replying, slot freed</h3>${bn.map(c=>`<div class="line"><a class="h" style="color:var(--blue);font-weight:700;text-decoration:none" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a><span class="note">${esc(c.first_name||'')} · benched from ${LABEL[c.lost_from]||'?'} · last touch ${ago(c.last_activity_at)} ago · ${Math.min(c.touches||0,9)} follow-up${(c.touches||0)===1?'':'s'} sent</span><button class="btn p s" data-a="mv" data-id="${c.id}|${c.lost_from||'talking'}">They replied, bring back</button><button class="btn s" data-a="followed" data-id="${c.id}">I followed up</button><button class="btn s q" data-a="deadq2" data-id="${c.id}">Dead</button></div>`).join('')||'<div class="note">Empty. When an active conversation stops replying, hit Bench on its card to free the slot and take a new one. It waits here until they reply.</div>'}${bn.length?'<p class="note" style="margin-top:8px">A benched conversation with no touch for 7 days moves to Ghosted.</p>':''}</div>
-  <div class="box sec"><h3 style="display:flex;justify-content:space-between"><span>Ghosted · parking lot (${gh.length})</span><button class="btn s q" data-a="ghost">${ui.ghost?'Hide':'Show'}</button></h3>${ui.ghost?(gh.map(c=>`<div class="line"><a class="h" style="color:var(--blue);font-weight:700;text-decoration:none" href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener">@${esc(c.ig_handle)}</a><span class="note">${esc(c.first_name||'')} · went quiet at ${LABEL[c.lost_from]||'?'} · parked ${ago(c.closed_at||c.last_activity_at)} ago</span><button class="btn s" data-a="mv" data-id="${c.id}|${c.lost_from&&c.lost_from!=='new'&&c.lost_from!=='booked'?c.lost_from:'talking'}">They replied, bring back</button><button class="btn s q" data-a="deadq2" data-id="${c.id}">Dead</button></div>`).join('')||'<div class="empty">Nothing parked.</div>'):'<div class="note">Three follow-ups with no reply, or three days untouched, parks a conversation here and frees the slot.</div>'}</div>`;
-}
-
-function leak(){
-  const r=ui.range,bk=S.setters.filter(s=>s.active&&s.role==='booker');
-  const row=(name,list,odn)=>{const f=k=>list.filter(c=>c[k]).length,n=list.length,st=f('picked_at'),q=f('qualified_at'),l=f('link_at'),bo=f('booked_at'),s=f('showed_at'),w=list.filter(c=>c.stage==='won').length;
-    const cell=(a,p)=>`<td class="num"><b>${a}</b>${p?`<div class="note">${Math.round(a/p*100)}%</div>`:''}</td>`;
-    const lost={};list.filter(c=>c.lost_from&&(c.stage==='ghosted'||c.stage==='dead')).forEach(c=>lost[c.lost_from]=(lost[c.lost_from]||0)+1);const top=Object.entries(lost).sort((a,b)=>b[1]-a[1])[0];
-    return `<tr><td><b>${esc(name)}</b></td>${cell(n)}${cell(st,n)}${cell(q,st)}${cell(l,q)}${cell(bo,l)}${cell(s,bo)}${cell(w,s)}<td>${top?LABEL[top[0]]+' ('+top[1]+')':'—'}</td><td class="num" style="${odn?'color:var(--bad);font-weight:700':''}">${odn}</td></tr>`};
-  const ids=bk.map(b=>b.id),set=id=>S.conversations.filter(c=>(id?c.booker_id===id:ids.includes(c.booker_id))&&inR(c.assigned_at||c.created_at,r));
-  const odn=id=>S.conversations.filter(c=>(id?c.booker_id===id:ids.includes(c.booker_id))&&BOARD.includes(c.stage)&&overdue(c)).length;
-  return `<div class="box" style="margin-bottom:18px"><div class="line" style="justify-content:space-between"><h2 style="margin:0">Where conversations are being lost</h2><div class="seg" style="margin:0">${[['today','Today'],['week','This week'],['30d','Last 30 days']].map(x=>`<button class="${r===x[0]?'on':''}" data-a="range" data-id="${x[0]}">${x[1]}</button>`).join('')}</div></div><div style="overflow-x:auto"><table><tr><th>Booker</th><th class="num">Handed off</th><th class="num">Started</th><th class="num">Ready to book</th><th class="num">Link sent</th><th class="num">Booked</th><th class="num">Showed</th><th class="num">Closed</th><th>Most lost at</th><th class="num">Overdue now</th></tr>${bk.map(b=>row(b.name,set(b.id),odn(b.id))).join('')}${bk.length>1?row('Team',set(null),odn(null)):''}${bk.length?'':'<tr><td colspan="10" class="empty">No bookers added yet.</td></tr>'}</table></div><p class="note" style="margin-top:10px">Each % is the share that made it from the step before. The smallest % is the leak.</p></div>`;
+function teamView(m){
+  const st=setters(),canTake=m.role!=='manager';
+  const open=S.conversations.filter(c=>takeable(c)&&c.booker_id!==m.id).sort((a,b)=>el(b)-el(a));
+  const q=ui.q.trim().toLowerCase().replace(/^@/,''),hit=c=>!q||c.ig_handle.includes(q);
+  const all=S.conversations.filter(isOpen);
+  return `<div class="tiles">${tile(all.filter(isLive).length,'Live across the team')}${tile(all.filter(isBench).length,'On the bench')}${tile(all.filter(waiting).length,'Waiting on a setter',all.some(takeable)?'bad':'')}${tile(S.conversations.filter(c=>inR(c.booked_at,'today')).length,'Booked today','good')}${tile(S.conversations.filter(c=>inR(c.booked_at,'week')).length,'Booked this week')}</div>
+  <div class="box" style="margin-bottom:18px"><h3>Open to take over · ${open.length} · prospect replied ${S.cfg.take}+ minutes ago, no answer</h3>${open.map(c=>`<div class="row">${ig(c)}<span class="note">with <b>${esc(nm(c.booker_id))}</b></span><span class="pill ${c.stage}">${LABEL[c.stage]}</span><span style="color:var(--bad);font-weight:700">unanswered ${clock(c,'')}</span><span class="sp">${canTake?B('take',c.id,'Take over','s r'):''}</span></div>`).join('')||'<div class="empty">Nothing open. Every reply has been answered inside the limit.</div>'}</div>
+  <div class="line"><input type="text" id="q" data-f="q" placeholder="Search a handle to see who has it" value="${esc(ui.q)}" autocomplete="off"></div>
+  <div class="team">${st.map(s=>{const mine=mineOf(s.id).filter(isOpen),lv=mine.filter(isLive).sort((a,b)=>el(a)-el(b)),bn=mine.filter(isBench).sort((a,b)=>el(a)-el(b));const rw=c=>`<div class="row">${ig(c)}${clock(c)}<span class="tag ${takeable(c)?'b':c.last_dir==='received'?'w':''}">${c.last_dir==='received'?'they replied':'setter sent'}</span><span class="sp"><span class="pill ${c.stage}">${LABEL[c.stage]}</span></span></div>`;
+    return `<div class="box"><h2 style="display:flex;justify-content:space-between"><span>${esc(s.name)}${s.id===m.id?' (you)':''}</span><span style="color:${lv.length>S.cfg.cap?'var(--bad)':'inherit'}">${lv.length}/${S.cfg.cap} live</span></h2><h3>Live</h3>${lv.filter(hit).map(rw).join('')||'<div class="empty">None live.</div>'}<h3 style="margin-top:14px">Bench · ${bn.length}</h3>${bn.filter(hit).map(rw).join('')||'<div class="empty">Empty.</div>'}</div>`}).join('')||'<div class="box empty">No setters added yet. Add them in the Manager tab.</div>'}</div>`;
 }
 
 function lbView(){
-  const r=ui.range,bk=S.setters.filter(s=>s.active&&s.role==='booker'),op=S.setters.filter(s=>s.active&&s.role==='opener');
-  const rows=bk.map(b=>{const bc=S.conversations.filter(c=>c.booker_id===b.id&&inR(c.booked_at,r));const sh=bc.filter(c=>c.showed_at).length,ns=bc.filter(c=>c.no_show_at&&!c.showed_at).length;return{n:b.name,booked:bc.length,show:sh+ns?Math.round(sh/(sh+ns)*100)+'%':'—',cash:bc.reduce((a,c)=>a+Number(c.cash||0),0),load:load(b.id)}}).sort((a,b)=>b.booked-a.booked||b.cash-a.cash);
-  const orow=op.map(o=>{const h=S.conversations.filter(c=>c.opener_id===o.id&&inR(c.created_at,r));return{n:o.name,h:h.length,b:h.filter(c=>c.booked_at&&new Date(c.booked_at)-new Date(c.created_at)<=7*864e5).length,o:S.counts.filter(c=>c.setter_id===o.id&&c.day>=rangeStart(r)).reduce((a,c)=>a+c.opened,0)}}).sort((a,b)=>b.b-a.b||b.h-a.h);
+  const r=ui.range;
+  const rows=setters().map(s=>{const sp=speed(s.id,r);return{n:s.name,b:S.conversations.filter(c=>c.booker_id===s.id&&inR(c.booked_at,r)).length,live:mineOf(s.id).filter(isLive).length,st:S.conversations.filter(c=>c.opener_id===s.id&&inR(c.created_at,r)).length,sp,won:S.conversations.filter(c=>c.booker_id===s.id&&c.taken_from&&inR(c.taken_at,r)).length,lost:S.conversations.filter(c=>c.taken_from===s.id&&inR(c.taken_at,r)).length}}).sort((a,b)=>b.b-a.b||b.st-a.st);
   const medal=i=>['🥇','🥈','🥉'][i]||i+1;
   return `<div class="seg">${[['today','Today'],['week','This week'],['30d','Last 30 days']].map(x=>`<button class="${r===x[0]?'on':''}" data-a="range" data-id="${x[0]}">${x[1]}</button>`).join('')}</div>
-  <div class="grid2"><div class="box"><h2>Bookers · booked calls</h2>${rows.length?`<table><tr><th></th><th>Booker</th><th class="num">Booked</th><th class="num">Show rate</th><th class="num">Cash</th><th class="num">Active</th></tr>${rows.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num big">${x.booked}</td><td class="num">${x.show}</td><td class="num">${money(x.cash)}</td><td class="num">${x.load}/${S.cap}</td></tr>`).join('')}</table>`:'<div class="empty">No bookers added yet.</div>'}<p class="note" style="margin-top:12px">Ranked on booked calls. Show rate and cash sit next to it so a full calendar of no-shows doesn't win.</p></div>
-  <div class="box"><h2>Openers · handoffs that booked</h2>${orow.length?`<table><tr><th></th><th>Opener</th><th class="num">Booked</th><th class="num">Handoffs</th><th class="num">Opened</th></tr>${orow.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num big">${x.b}</td><td class="num">${x.h}</td><td class="num">${x.o}</td></tr>`).join('')}</table>`:'<div class="empty">No openers added yet.</div>'}<p class="note" style="margin-top:12px">Ranked on handoffs that booked within 7 days, not on how many were passed over.</p></div></div>`;
+  <div class="box"><h2>Booked calls</h2><div style="overflow-x:auto">${rows.length?`<table><tr><th></th><th>Setter</th><th class="num">Booked</th><th class="num">Live now</th><th class="num">Conversations started</th><th class="num">Replies inside ${S.cfg.take} min</th><th class="num">Average reply time</th><th class="num">Took over</th><th class="num">Lost to takeover</th></tr>${rows.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num bign">${x.b}</td><td class="num">${x.live}/${S.cfg.cap}</td><td class="num">${x.st}</td><td class="num">${x.sp.pct}</td><td class="num">${x.sp.avg}</td><td class="num">${x.won}</td><td class="num" style="${x.lost?'color:var(--bad);font-weight:700':''}">${x.lost}</td></tr>`).join('')}</table>`:'<div class="empty">No setters added yet.</div>'}</div><p class="note" style="margin-top:12px">A booking counts for whoever owns the conversation when it is booked. Reply time is measured from "Message received" to the next "Message sent".</p></div>`;
 }
 
 function allRows(){
-  const q=ui.q.trim().toLowerCase().replace(/^@/,''),f=ui.filter;
-  const bk=S.setters.filter(s=>s.active&&s.role==='booker');
-  const list=S.conversations.filter(c=>{if(q&&!(c.ig_handle.includes(q)||(c.first_name||'').toLowerCase().includes(q)))return false;if(q)return true;if(f==='live')return c.stage==='queued'||c.stage==='bench'||ACTIVE.includes(c.stage);if(f==='booked')return['booked','won','followup','no_show'].includes(c.stage);if(f==='closed')return['ghosted','dead'].includes(c.stage);return true}).slice(0,300);
-  return list.length?list.map(c=>`<tr><td><a href="https://ig.me/m/${encodeURIComponent(c.ig_handle)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:none">@${esc(c.ig_handle)}</a><div class="note">${esc(c.first_name||'')}</div></td><td><span class="pill ${c.stage}">${LABEL[c.stage]}</span>${c.stage==='dead'&&c.dead_reason?`<div class="note">${esc(c.dead_reason)}</div>`:''}</td><td>${S.is_admin&&(c.stage==='queued'||ACTIVE.includes(c.stage))?`<select data-re="${c.id}"><option value="">${c.booker_id?esc(nm(c.booker_id)):'Queue'}</option>${bk.filter(b=>b.id!==c.booker_id).map(b=>`<option value="${b.id}">→ ${esc(b.name)}</option>`).join('')}</select>`:(c.booker_id?esc(nm(c.booker_id)):'Queue')}</td><td>${c.opener_id?esc(nm(c.opener_id)):'—'}</td><td class="num">${ago(c.last_activity_at)}</td><td class="num">${ago(c.created_at)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nothing here.</td></tr>';
+  const q=ui.q.trim().toLowerCase().replace(/^@/,''),f=ui.filter,st=setters();
+  const list=S.conversations.filter(c=>{if(q)return c.ig_handle.includes(q);if(f==='open')return isOpen(c);if(f==='booked')return c.stage==='booked';if(f==='closed')return c.stage==='dead'||c.stage==='ghosted';return true}).slice(0,300);
+  return list.length?list.map(c=>`<tr><td>${ig(c)}</td><td><span class="pill ${c.stage}">${LABEL[c.stage]||c.stage}</span>${isOpen(c)?` <span class="tag">${isLive(c)?'live':'bench'}</span>`:''}${c.stage==='dead'&&c.dead_reason?`<div class="note">${esc(c.dead_reason)}</div>`:''}</td><td>${S.is_admin&&isOpen(c)?`<select data-re="${c.id}"><option value="">${esc(nm(c.booker_id))}</option>${st.filter(b=>b.id!==c.booker_id).map(b=>`<option value="${b.id}">→ ${esc(b.name)}</option>`).join('')}</select>`:`<b>${esc(nm(c.booker_id))}</b>`}</td><td>${esc(nm(c.opener_id))}</td><td>${c.taken_from?esc(nm(c.taken_from))+` <span class="note">${new Date(c.taken_at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</span>`:'—'}</td><td>${isOpen(c)?`${clock(c,'')} <span class="note">${c.last_dir==='received'?'they replied':'setter sent'}</span>`:'—'}</td><td class="num note">${new Date(c.created_at).toLocaleDateString([], {month:'short',day:'numeric'})}</td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nothing here.</td></tr>';
 }
 function allView(){
-  const live=S.conversations.filter(c=>BOARD.includes(c.stage)),q=S.conversations.filter(c=>c.stage==='queued').length;
-  const bT=S.conversations.filter(c=>inR(c.booked_at,'today')).length,bW=S.conversations.filter(c=>inR(c.booked_at,'week')).length,hT=S.conversations.filter(c=>inR(c.created_at,'today')).length;
-  return `<div class="tiles">${tile(live.length,'Live conversations')}${tile(q,'In the queue',q?'bad':'')}${tile(hT,'Handoffs today')}${tile(bT,'Booked today',bT?'good':'')}${tile(bW,'Booked this week')}${tile(live.filter(cold).length,'Overdue right now',live.some(cold)?'bad':'')}</div>
-  ${leak()}
-  ${S.slack_configured?'':'<div class="alert">Slack is not connected yet, so handoffs are not posting to #dm-handoff. Connect it in the Manager tab.</div>'}
-  <div class="grid2" style="grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)"><div class="box"><div class="line"><input type="text" id="q" placeholder="Search a handle or name to see who has it" value="${esc(ui.q)}" autocomplete="off"><div class="seg" style="margin:0">${[['live','Live'],['booked','Booked'],['closed','Closed'],['all','All']].map(x=>`<button class="${ui.filter===x[0]?'on':''}" data-a="filter" data-id="${x[0]}">${x[1]}</button>`).join('')}</div></div><div style="overflow-x:auto"><table><thead><tr><th>Prospect</th><th>Stage</th><th>Booker</th><th>Opener</th><th class="num">Last activity</th><th class="num">Handed off</th></tr></thead><tbody id="rows">${allRows()}</tbody></table></div></div><div class="box">${capacity()}</div></div>`;
+  return `<div class="box"><div class="line"><input type="text" id="q" data-f="q" placeholder="Search a handle to see who owns it" value="${esc(ui.q)}" autocomplete="off"><div class="seg" style="margin:0">${[['open','Open'],['booked','Booked'],['closed','Closed'],['all','All']].map(x=>`<button class="${ui.filter===x[0]?'on':''}" data-a="filter" data-id="${x[0]}">${x[1]}</button>`).join('')}</div></div><div style="overflow-x:auto"><table><thead><tr><th>Prospect</th><th>Stage</th><th>Owner</th><th>Started by</th><th>Taken over from</th><th>Last message</th><th class="num">Started</th></tr></thead><tbody id="rows">${allRows()}</tbody></table></div></div>`;
 }
 
 function adminView(){
-  const a=S.admin||{},site=SITE;
-  const showed=S.conversations.filter(c=>c.showed_at);
+  const a=S.admin||{},c=S.cfg,link=SITE+'/?k='+(a.team_code||'');
   return `<div class="grid2"><div>
-  <div class="box"><h2>Team</h2>${S.setters.map(s=>`<div class="line"><input type="text" id="n_${s.id}" value="${esc(s.name)}"><select id="r_${s.id}">${Object.keys(ROLE).map(r=>`<option value="${r}" ${s.role===r?'selected':''}>${ROLE[r]}</option>`).join('')}</select><label style="margin:0;font-weight:500"><input type="checkbox" id="a_${s.id}" ${s.active?'checked':''}> Active</label><button class="btn s" data-a="saveSetter" data-id="${s.id}">Save</button></div>`).join('')}
-  <h3 style="margin-top:16px">Add someone</h3><div class="line"><input type="text" id="n_new" placeholder="Name"><select id="r_new"><option value="opener">Opener</option><option value="booker">Booker</option><option value="manager">Manager</option></select><button class="btn d s" data-a="addSetter">Add</button></div></div>
-  <div class="box sec"><h2>Cash collected on calls that showed</h2><p class="note">Feeds the cash column on the leaderboard.</p>${showed.length?showed.map(c=>`<div class="line"><b>@${esc(c.ig_handle)}</b><span class="note">${esc(nm(c.booker_id))}</span><input type="number" id="c_${c.id}" value="${Number(c.cash||0)}" style="width:120px;flex:none" min="0"><button class="btn s" data-a="cash" data-id="${c.id}">Save</button></div>`).join(''):'<div class="empty">No showed calls yet.</div>'}</div>
+  <div class="box"><h2>Team</h2>${S.setters.map(s=>`<div class="line"><input type="text" id="n_${s.id}" value="${esc(s.name)}"><select id="r_${s.id}"><option value="setter" ${s.role!=='manager'?'selected':''}>Setter</option><option value="manager" ${s.role==='manager'?'selected':''}>Manager</option></select><label style="margin:0;font-weight:500"><input type="checkbox" id="a_${s.id}" ${s.active?'checked':''}> Active</label>${B('saveSetter',s.id,'Save')}</div>`).join('')}
+  <h3 style="margin-top:16px">Add someone</h3><div class="line"><input type="text" id="n_new" placeholder="Name"><select id="r_new"><option value="setter">Setter</option><option value="manager">Manager</option></select>${B('addSetter','','Add','s d')}</div></div>
+  <div class="box sec"><h2>Team link</h2><p class="note">Send this to the setters. It lets them straight in.</p><div class="line"><input type="text" readonly value="${esc(link)}">${B('copy',esc(link),'Copy')}</div></div>
   </div><div>
-  <div class="box"><h2>Team link</h2><p class="note">Send this to the setters. It lets them straight in.</p><div class="line"><input type="text" readonly value="${esc(site+'/?k='+(a.team_code||''))}"><button class="btn s" data-a="copy" data-id="${esc(site+'/?k='+(a.team_code||''))}">Copy</button></div></div>
-  <div class="box sec"><h2>Slack · #dm-handoff</h2><p class="note">${S.slack_configured?'Connected. Handoffs, queue alerts and booked calls post to the channel.':'Not connected. Paste the incoming webhook URL for #dm-handoff below.'}</p><div class="line"><input type="text" id="s_hook" placeholder="${S.slack_configured?'Paste a new webhook URL to replace the current one':'https://hooks.slack.com/services/…'}" autocomplete="off"><button class="btn d s" data-a="saveHook">Save</button><button class="btn s" data-a="testSlack">Send test</button></div></div>
-  <div class="box sec"><h2>Booking links and cap</h2><label>Done-for-you link</label><input type="text" id="s_dfy" value="${esc(a.dfy_link)}"><label>Mentorship link</label><input type="text" id="s_men" value="${esc(a.mentorship_link)}" placeholder="Calendly or funnel link the booker sends"><label>Active conversations per booker</label><input type="number" id="s_cap" value="${esc(a.cap||S.cap)}" min="1"><button class="btn d big" data-a="saveSettings">Save</button></div>
+  <div class="box"><h2>Rules</h2><label>Live conversations per setter</label><input type="number" id="s_cap" value="${c.cap}" min="1"><label>Minutes since the last message before a conversation drops to the bench</label><input type="number" id="s_bench" value="${c.bench}" min="1"><label>Minutes a prospect's reply can sit unanswered before another setter may take it over</label><input type="number" id="s_take" value="${c.take}" min="1"><label style="font-weight:500"><input type="checkbox" id="s_protect" ${c.protect?'checked':''}> Block takeovers once the booking link has been sent</label><button class="btn d big" data-a="saveRules">Save rules</button></div>
+  <div class="box sec"><h2>Slack · #dm-handoff</h2><p class="note">${S.slack_configured?'Connected. Booked calls and takeovers post to the channel.':'Not connected. Paste the incoming webhook URL below.'}</p><div class="line"><input type="text" id="s_hook" placeholder="${S.slack_configured?'Paste a new webhook URL to replace the current one':'https://hooks.slack.com/services/…'}" autocomplete="off">${B('saveHook','','Save','s d')}${B('testSlack','','Send test')}</div></div>
   </div></div>`;
 }
 
 function draw(){
-  const app=$('#app');
+  const app=$('#app'),a=document.activeElement,fid=a&&a.id,pos=a&&a.selectionStart;
   if(!code||!S){app.innerHTML=gate();return}
   const m=me();
   if(!m){app.innerHTML=who();return}
   const ts=tabsFor(m);if(!ts.some(t=>t[0]===tab))tab=ts[0][0];
-  const v=tab==='handoff'?handoffView(m):tab==='board'?boardView(m):tab==='lb'?lbView():tab==='admin'?adminView():allView();
-  app.innerHTML=shell(m)+'<main>'+v+'</main>';
+  const v=tab==='mine'?mineView(m):tab==='lb'?lbView():tab==='admin'?adminView():tab==='all'?allView():teamView(m);
+  app.innerHTML=shell(m)+'<main>'+v+'</main>';sig=sigNow();
+  if(fid){const e=document.getElementById(fid);if(e){e.focus();try{e.setSelectionRange(pos,pos)}catch(x){}}}
 }
 
 /* ---------- actions ---------- */
 const H={
   enter(){const v=($('#codeIn').value||'').trim();if(!v)return;code=v;LS.set('de_code',v);refresh()},
-  pick(el){meId=el.dataset.id;LS.set('de_me',meId);tab='';draw()},
+  pick(e){meId=e.dataset.id;LS.set('de_me',meId);tab='';draw()},
   switch(){meId='';LS.set('de_me',null);draw()},
-  tab(el){tab=el.dataset.id;LS.set('de_tab',tab);ui.deadFor=null;draw()},
-  chip(el){const p=el.dataset.id.split('|'),v=CH[p[0]][+p[1]];draft[p[0]]=draft[p[0]]===v?'':v;draw()},
-  async handoff(){
-    if(!(draft.ig_handle||'').trim())return toast('Add the Instagram handle',true);
-    if(!(draft.where_it_stands||'').trim())return toast('Add where the conversation stands',true);
-    const d=draft;const r=await act('handoff',d);
-    if(r){draft={};draw();toast(r.queued?'Handed off. Every booker is full, so it is in the queue.':'Handed off to '+r.assigned_to+(r.slack==='sent'?' · posted in Slack':''))}
-  },
-  opened(el){act('opened',{delta:+el.dataset.id})},
-  mv(el){const p=el.dataset.id.split('|');act('move',{id:p[0],to:p[1]})},
-  followed(el){act('followed',{id:el.dataset.id},'Follow-up logged')},
-  pre(el){const p=el.dataset.id.split('|');act('precall',{id:p[0],bit:+p[1]})},
-  bookq(el){ui.bookFor=el.dataset.id;ui.bookVal='';ui.deadFor=null;draw()},
-  bookX(){ui.bookFor=null;draw()},
-  bookSkip(el){ui.bookFor=null;act('move',{id:el.dataset.id,to:'booked'},'Booked. Add the call time when you have it.')},
-  bookSave(el){const id=el.dataset.id,v=($('#when_'+id)||{}).value;if(!v)return toast('Pick the call date and time',true);const at=new Date(v).toISOString(),c=S.conversations.find(x=>x.id===id);ui.bookFor=null;if(c&&c.stage==='booked')act('set_call',{id,call_at:at},'Call time saved');else act('move',{id,to:'booked',call_at:at},'Booked. Nice.')},
-  touch(el){act('touch',{id:el.dataset.id},'Timer reset')},
-  claim(el){act('claim',{id:el.dataset.id},'Claimed')},
-  open(el){ui.open[el.dataset.id]=!ui.open[el.dataset.id];draw()},
-  deadq(el){ui.deadFor=el.dataset.id;ui.bookFor=null;draw()},
-  deadq2(el){act('move',{id:el.dataset.id,to:'dead',dead_reason:'Went cold'})},
+  tab(e){tab=e.dataset.id;LS.set('de_tab',tab);ui.deadFor=null;ui.q='';draw()},
+  async add(e){const v=(draft.ig||'').trim();if(!v)return toast('Type the Instagram handle first',true);const r=await act('add',{ig_handle:v,dir:e.dataset.id});if(r){draft.ig='';draw();toast('Added. Clock is running.')}},
+  ping(e){const p=e.dataset.id.split('|');act('ping',{id:p[0],dir:p[1]})},
+  mv(e){const p=e.dataset.id.split('|');act('move',{id:p[0],to:p[1]},p[1]==='booked'?'Booked. Nice.':null)},
+  take(e){act('take',{id:e.dataset.id},'It is yours. Reply now.')},
+  deadq(e){ui.deadFor=e.dataset.id;draw()},
   deadx(){ui.deadFor=null;draw()},
-  dead(el){const p=el.dataset.id.split('|');ui.deadFor=null;act('move',{id:p[0],to:'dead',dead_reason:DEAD[+p[1]]})},
-  copy(el){copy(el.dataset.id)},
-  ghost(){ui.ghost=!ui.ghost;draw()},
-  range(el){ui.range=el.dataset.id;draw()},
-  filter(el){ui.filter=el.dataset.id;draw()},
-  saveSetter(el){const id=el.dataset.id;act('admin_setter',{id,name:$('#n_'+id).value,role:$('#r_'+id).value,active:$('#a_'+id).checked},'Saved')},
+  dead(e){const p=e.dataset.id.split('|');ui.deadFor=null;act('move',{id:p[0],to:'dead',dead_reason:DEAD[+p[1]]})},
+  copy(e){copy(e.dataset.id)},
+  range(e){ui.range=e.dataset.id;draw()},
+  filter(e){ui.filter=e.dataset.id;draw()},
+  saveSetter(e){const id=e.dataset.id;act('admin_setter',{id,name:$('#n_'+id).value,role:$('#r_'+id).value,active:$('#a_'+id).checked},'Saved')},
   addSetter(){act('admin_setter',{name:$('#n_new').value,role:$('#r_new').value},'Added')},
-  cash(el){act('admin_cash',{id:el.dataset.id,cash:$('#c_'+el.dataset.id).value},'Saved')},
+  saveRules(){act('admin_settings',{active_cap:$('#s_cap').value,bench_minutes:$('#s_bench').value,takeover_minutes:$('#s_take').value,protect_link:$('#s_protect').checked?'1':'0',site_url:SITE},'Rules saved')},
   saveHook(){const v=$('#s_hook').value.trim();if(!v)return toast('Paste the webhook URL first',true);act('admin_settings',{slack_webhook:v,site_url:SITE},'Slack connected')},
-  async testSlack(){const r=await act('admin_test_slack');if(r)toast(r.slack==='sent'?'Test sent to Slack':r.slack==='not_configured'?'Slack is not connected yet':'Slack rejected it. Check the webhook URL.',r.slack!=='sent')},
-  saveSettings(){act('admin_settings',{dfy_link:$('#s_dfy').value,mentorship_link:$('#s_men').value,cap:$('#s_cap').value,site_url:SITE},'Saved')}
+  async testSlack(){const r=await act('admin_test_slack');if(r)toast(r.slack==='sent'?'Test sent to Slack':'Slack is not connected or rejected it',r.slack!=='sent')}
 };
-document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&H[el.dataset.a]){e.preventDefault();H[el.dataset.a](el)}});
-document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.f)draft[t.dataset.f]=t.value;if(t.dataset&&t.dataset.bk)ui.bookVal=t.value;if(t.id==='q'){ui.q=t.value;const r=$('#rows');if(r)r.innerHTML=allRows()}});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&H[b.dataset.a]){e.preventDefault();H[b.dataset.a](b)}});
+document.addEventListener('input',e=>{const t=e.target,f=t.dataset&&t.dataset.f;if(f==='ig')draft.ig=t.value;if(f==='q'){ui.q=t.value;const r=$('#rows');if(r)r.innerHTML=allRows();else draw()}});
 document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.re&&t.value)act('admin_reassign',{id:t.dataset.re,booker_id:t.value},'Reassigned')});
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='codeIn')H.enter()});
-setInterval(()=>{if(!code||document.hidden||busy)return;const a=document.activeElement;const typing=a&&['INPUT','TEXTAREA','SELECT'].includes(a.tagName);refresh(!typing&&!ui.deadFor&&!ui.bookFor)},15000);
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;if(e.target.id==='codeIn')H.enter();if(e.target.id==='addIg')H.add({dataset:{id:'received'}})});
+const typingAdmin=()=>{const a=document.activeElement;return tab==='admin'&&a&&['INPUT','SELECT'].includes(a.tagName)};
+// Stopwatches tick every second; redraw only when a conversation crosses a line (bench, takeover).
+setInterval(()=>{if(!S||!me())return;document.querySelectorAll('[data-ts]').forEach(x=>{x.textContent=fmt(Math.max(0,nowMs()-(+x.dataset.ts)))});if(!busy&&!ui.deadFor&&!typingAdmin()&&sigNow()!==sig)draw()},1000);
+setInterval(()=>{if(!code||document.hidden||busy)return;refresh(!typingAdmin()&&!ui.deadFor)},10000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&code)refresh()});
 if(code)refresh();else draw();
 </script>
