@@ -20,6 +20,8 @@ nav button.on{opacity:1;border-bottom-color:#fff}
 .who button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:6px;padding:5px 10px;font-size:13px}
 main{padding:20px;max-width:1500px;margin:0 auto}
 h2{font-size:16px;margin:0 0 12px}
+h4{font-size:14px;margin:16px 0 0;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h4 span{color:var(--mute);font-weight:500}
 h3{font-size:12px;margin:0 0 10px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
 .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
 .sec{margin-top:18px}
@@ -64,7 +66,7 @@ input:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px}
 .pill.talking,.pill.qualifying,.pill.qualified,.pill.link_sent{background:var(--blueBg);color:var(--blue)}
 .pill.booked{background:var(--goBg);color:var(--go)}.pill.ghosted{background:var(--warnBg);color:var(--warn)}
 .tag{font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 6px;background:#eef0f3}
-.tag.b{background:var(--badBg);color:var(--bad)}.tag.w{background:var(--warnBg);color:var(--warn)}
+.tag.g{background:var(--goBg);color:var(--go)}.tag.b{background:var(--badBg);color:var(--bad)}.tag.w{background:var(--warnBg);color:var(--warn)}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th{text-align:left;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line)}
 td{padding:10px;border-bottom:1px solid #eef0f3;vertical-align:middle}
@@ -126,6 +128,11 @@ const waiting=c=>isOpen(c)&&c.last_dir==='received';
 const takeable=c=>waiting(c)&&el(c)>=S.cfg.take*60e3&&!(S.cfg.protect&&c.stage==='link_sent');
 const setters=()=>S.setters.filter(s=>s.active&&s.role!=='manager');
 const mineOf=id=>S.conversations.filter(c=>c.booker_id===id);
+// One rally = a message each way. A conversation counts once it reaches the minimum, on the day it got there.
+const rallies=c=>Math.floor(((c.switches||0)+1)/2);
+const rallyTag=c=>c.counted_at?'<span class="tag g">✓ counted</span>':`<span class="tag">rally ${rallies(c)}/${S.cfg.rally}</span>`;
+const countedOn=(id,day)=>S.conversations.filter(c=>c.counted_by===id&&c.counted_at&&dayOf(c.counted_at)===day).length;
+const countedIn=(id,r)=>S.conversations.filter(c=>c.counted_by===id&&inR(c.counted_at,r)).length;
 const bucket=c=>(isLive(c)?0:2)+(takeable(c)?1:0);
 const sigNow=()=>S?S.conversations.filter(isOpen).map(c=>c.id+bucket(c)).join():'';
 
@@ -159,13 +166,13 @@ function card(c){
   const t=takeable(c);
   return `<div class="card ${t?'open':c.last_dir==='received'?'recv':''}">
     <div class="top">${ig(c)}<span class="pill ${c.stage}">${LABEL[c.stage]}</span></div>
-    ${clock(c,'clock')}<div>${dirText(c,true)}</div>
+    ${clock(c,'clock')}<div>${dirText(c,true)} ${rallyTag(c)}</div>
     <div class="acts">${B('ping',c.id+'|sent','Message sent','xl d')}${B('ping',c.id+'|received','Message received','xl')}</div>
     ${ui.deadFor===c.id?deadRow(c):`<div class="acts">${stageBtns(c)}</div>`}
   </div>`;
 }
 function benchRow(c){
-  return `<div class="row">${ig(c)}<span class="pill ${c.stage}">${LABEL[c.stage]}</span>${clock(c)}${dirText(c,true)}<span class="sp">${ui.deadFor===c.id?deadRow(c):B('ping',c.id+'|sent','Sent','s d')+B('ping',c.id+'|received','Received')+stageBtns(c)}</span></div>`;
+  return `<div class="row">${ig(c)}${clock(c)}${dirText(c,true)}${rallyTag(c)}<span class="sp">${ui.deadFor===c.id?deadRow(c):B('ping',c.id+'|sent','Sent','s d')+B('ping',c.id+'|received','Received')+stageBtns(c)}</span></div>`;
 }
 function tile(n,l,cls){return `<div class="tile ${cls||''}"><div class="n">${n}</div><div class="l">${l}</div></div>`}
 function speed(id,r){const rows=S.counts.filter(c=>c.setter_id===id&&c.day>=rangeStart(r)),n=rows.reduce((a,c)=>a+c.replies,0),f=rows.reduce((a,c)=>a+c.fast,0),s=rows.reduce((a,c)=>a+Number(c.reply_secs),0);return{n,pct:n?Math.round(f/n*100)+'%':'—',avg:n?fmt(s/n*1000):'—'}}
@@ -179,12 +186,12 @@ function shell(m){return `<header><div class="logo">DM Board <span>· Deal Engin
 function mineView(m){
   const mine=mineOf(m.id),live=mine.filter(isLive).sort((a,b)=>(b.last_dir==='received')-(a.last_dir==='received')||el(b)-el(a)),bench=mine.filter(isBench).sort((a,b)=>el(a)-el(b));
   const wait=mine.filter(waiting).length,risk=mine.filter(takeable).length,bT=mine.filter(c=>inR(c.booked_at,'today')).length,bW=mine.filter(c=>c.stage==='booked'&&inR(c.booked_at,'week')),sp=speed(m.id,'today'),cap=S.cfg.cap;
-  return `<div class="tiles">${tile(`${live.length}<small>/${cap}</small>`,'Live conversations',live.length>cap?'bad':live.length===cap?'good':'')}${tile(bench.length,'On the bench')}${tile(wait,'Waiting on your reply',risk?'bad':wait?'warn':'')}${tile(bT,'Booked today',bT?'good':'')}${tile(mine.filter(c=>inR(c.booked_at,'week')).length,'Booked this week')}${tile(sp.pct,`Replies inside ${S.cfg.take} min today`)}</div>
+  return `<div class="tiles">${tile(`${live.length}<small>/${cap}</small>`,'Live conversations',live.length>cap?'bad':live.length===cap?'good':'')}${tile(bench.length,'On the bench')}${tile(wait,'Waiting on your reply',risk?'bad':wait?'warn':'')}${tile(countedOn(m.id,dayOf(nowMs())),`Conversations today (${S.cfg.rally}+ rallies)`)}${tile(bT,'Booked today',bT?'good':'')}${tile(mine.filter(c=>inR(c.booked_at,'week')).length,'Booked this week')}${tile(sp.pct,`Replies inside ${S.cfg.take} min today`)}</div>
   ${risk?`<div class="alert">${risk} of your conversations ${risk===1?'has':'have'} gone ${S.cfg.take}+ minutes without a reply. Another setter can take ${risk===1?'it':'them'} over.</div>`:''}
   <div class="addbar"><input type="text" id="addIg" data-f="ig" value="${esc(draft.ig)}" placeholder="New conversation: @handle or paste the profile link" autocomplete="off" autocapitalize="off">${B('add','received','+ They messaged me','d')}${B('add','sent','+ I messaged them',' ')}</div>
   <h3>Live · ${live.length} of ${cap}${live.length>cap?' · over the limit':''}</h3>
   ${live.length?`<div class="live">${live.map(card).join('')}</div>`:`<div class="box empty">No live conversations. Add one above. A conversation stays live for ${S.cfg.bench} minutes after the last message.</div>`}
-  <div class="box sec"><h3>Bench · ${bench.length} · quiet for ${S.cfg.bench}+ minutes, still yours to check</h3>${bench.map(benchRow).join('')||'<div class="empty">Nothing on the bench.</div>'}</div>
+  <div class="box sec"><h3>Bench · ${bench.length} · quiet for ${S.cfg.bench}+ minutes, still yours to check</h3>${OPEN.map(s=>{const l=bench.filter(c=>c.stage===s);return `<h4>${LABEL[s]} <span>· ${l.length}</span></h4>${l.map(benchRow).join('')||'<div class="empty">None at this stage.</div>'}`}).join('')}</div>
   <div class="box sec"><h3>Booked this week · ${bW.length}</h3>${bW.map(c=>`<div class="row">${ig(c)}<span class="pill booked">Booked</span><span class="note">${new Date(c.booked_at).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}</span><span class="sp">${B('mv',c.id+'|link_sent','Undo','s q')}</span></div>`).join('')||'<div class="empty">None yet this week.</div>'}</div>`;
 }
 
@@ -197,15 +204,17 @@ function teamView(m){
   <div class="box" style="margin-bottom:18px"><h3>Open to take over · ${open.length} · prospect replied ${S.cfg.take}+ minutes ago, no answer</h3>${open.map(c=>`<div class="row">${ig(c)}<span class="note">with <b>${esc(nm(c.booker_id))}</b></span><span class="pill ${c.stage}">${LABEL[c.stage]}</span><span style="color:var(--bad);font-weight:700">unanswered ${clock(c,'')}</span><span class="sp">${canTake?B('take',c.id,'Take over','s r'):''}</span></div>`).join('')||'<div class="empty">Nothing open. Every reply has been answered inside the limit.</div>'}</div>
   <div class="line"><input type="text" id="q" data-f="q" placeholder="Search a handle to see who has it" value="${esc(ui.q)}" autocomplete="off"></div>
   <div class="team">${st.map(s=>{const mine=mineOf(s.id).filter(isOpen),lv=mine.filter(isLive).sort((a,b)=>el(a)-el(b)),bn=mine.filter(isBench).sort((a,b)=>el(a)-el(b));const rw=c=>`<div class="row">${ig(c)}${clock(c)}<span class="tag ${takeable(c)?'b':c.last_dir==='received'?'w':''}">${c.last_dir==='received'?'they replied':'setter sent'}</span><span class="sp"><span class="pill ${c.stage}">${LABEL[c.stage]}</span></span></div>`;
-    return `<div class="box"><h2 style="display:flex;justify-content:space-between"><span>${esc(s.name)}${s.id===m.id?' (you)':''}</span><span style="color:${lv.length>S.cfg.cap?'var(--bad)':'inherit'}">${lv.length}/${S.cfg.cap} live</span></h2><h3>Live</h3>${lv.filter(hit).map(rw).join('')||'<div class="empty">None live.</div>'}<h3 style="margin-top:14px">Bench · ${bn.length}</h3>${bn.filter(hit).map(rw).join('')||'<div class="empty">Empty.</div>'}</div>`}).join('')||'<div class="box empty">No setters added yet. Add them in the Manager tab.</div>'}</div>`;
+    return `<div class="box"><h2 style="display:flex;justify-content:space-between"><span>${esc(s.name)}${s.id===m.id?' (you)':''} <span class="note">· ${countedOn(s.id,dayOf(nowMs()))} conversations today</span></span><span style="color:${lv.length>S.cfg.cap?'var(--bad)':'inherit'}">${lv.length}/${S.cfg.cap} live</span></h2><h3>Live</h3>${lv.filter(hit).map(rw).join('')||'<div class="empty">None live.</div>'}<h3 style="margin-top:14px">Bench · ${bn.length}</h3>${bn.filter(hit).map(rw).join('')||'<div class="empty">Empty.</div>'}</div>`}).join('')||'<div class="box empty">No setters added yet. Add them in the Manager tab.</div>'}</div>`;
 }
 
 function lbView(){
   const r=ui.range;
-  const rows=setters().map(s=>{const sp=speed(s.id,r);return{n:s.name,b:S.conversations.filter(c=>c.booker_id===s.id&&inR(c.booked_at,r)).length,live:mineOf(s.id).filter(isLive).length,st:S.conversations.filter(c=>c.opener_id===s.id&&inR(c.created_at,r)).length,sp,won:S.conversations.filter(c=>c.booker_id===s.id&&c.taken_from&&inR(c.taken_at,r)).length,lost:S.conversations.filter(c=>c.taken_from===s.id&&inR(c.taken_at,r)).length}}).sort((a,b)=>b.b-a.b||b.st-a.st);
+  const rows=setters().map(s=>{const sp=speed(s.id,r);return{id:s.id,n:s.name,cv:countedIn(s.id,r),b:S.conversations.filter(c=>c.booker_id===s.id&&inR(c.booked_at,r)).length,live:mineOf(s.id).filter(isLive).length,st:S.conversations.filter(c=>c.opener_id===s.id&&inR(c.created_at,r)).length,sp,won:S.conversations.filter(c=>c.booker_id===s.id&&c.taken_from&&inR(c.taken_at,r)).length,lost:S.conversations.filter(c=>c.taken_from===s.id&&inR(c.taken_at,r)).length}}).sort((a,b)=>b.b-a.b||b.st-a.st);
+  const st=setters(),days=[0,1,2,3,4,5,6].map(i=>dayOf(nowMs()-i*864e5));
   const medal=i=>['🥇','🥈','🥉'][i]||i+1;
   return `<div class="seg">${[['today','Today'],['week','This week'],['30d','Last 30 days']].map(x=>`<button class="${r===x[0]?'on':''}" data-a="range" data-id="${x[0]}">${x[1]}</button>`).join('')}</div>
-  <div class="box"><h2>Booked calls</h2><div style="overflow-x:auto">${rows.length?`<table><tr><th></th><th>Setter</th><th class="num">Booked</th><th class="num">Live now</th><th class="num">Conversations started</th><th class="num">Replies inside ${S.cfg.take} min</th><th class="num">Average reply time</th><th class="num">Took over</th><th class="num">Lost to takeover</th></tr>${rows.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num bign">${x.b}</td><td class="num">${x.live}/${S.cfg.cap}</td><td class="num">${x.st}</td><td class="num">${x.sp.pct}</td><td class="num">${x.sp.avg}</td><td class="num">${x.won}</td><td class="num" style="${x.lost?'color:var(--bad);font-weight:700':''}">${x.lost}</td></tr>`).join('')}</table>`:'<div class="empty">No setters added yet.</div>'}</div><p class="note" style="margin-top:12px">A booking counts for whoever owns the conversation when it is booked. Reply time is measured from "Message received" to the next "Message sent".</p></div>`;
+  <div class="box"><h2>Booked calls</h2><div style="overflow-x:auto">${rows.length?`<table><tr><th></th><th>Setter</th><th class="num">Booked</th><th class="num">Conversations</th><th class="num">Started</th><th class="num">Live now</th><th class="num">Replies inside ${S.cfg.take} min</th><th class="num">Average reply time</th><th class="num">Took over</th><th class="num">Lost to takeover</th></tr>${rows.map((x,i)=>`<tr><td class="rank">${medal(i)}</td><td><b>${esc(x.n)}</b></td><td class="num bign">${x.b}</td><td class="num"><b>${x.cv}</b></td><td class="num">${x.st}</td><td class="num">${x.live}/${S.cfg.cap}</td><td class="num">${x.sp.pct}</td><td class="num">${x.sp.avg}</td><td class="num">${x.won}</td><td class="num" style="${x.lost?'color:var(--bad);font-weight:700':''}">${x.lost}</td></tr>`).join('')}</table>`:'<div class="empty">No setters added yet.</div>'}</div><p class="note" style="margin-top:12px">A booking counts for whoever owns the conversation when it is booked. Reply time is measured from "Message received" to the next "Message sent".</p></div>
+  <div class="box sec"><h2>Conversations per day</h2><div style="overflow-x:auto">${st.length?`<table><tr><th>Day</th>${st.map(s=>`<th class="num">${esc(s.name)}</th>`).join('')}<th class="num">Team</th></tr>${days.map((d,i)=>{const v=st.map(s=>countedOn(s.id,d)),bk=st.map(s=>S.conversations.filter(c=>c.booker_id===s.id&&c.booked_at&&dayOf(c.booked_at)===d).length),sum=a=>a.reduce((x,y)=>x+y,0);const cell=(n,b)=>`<td class="num"><b>${n}</b>${b?`<div class="note">${b} booked</div>`:''}</td>`;return `<tr><td>${i===0?'Today':new Date(d+'T12:00:00Z').toLocaleDateString([], {weekday:'short',month:'short',day:'numeric',timeZone:'UTC'})}</td>${v.map((n,j)=>cell(n,bk[j])).join('')}${cell(sum(v),sum(bk))}</tr>`}).join('')}</table>`:'<div class="empty">No setters added yet.</div>'}</div><p class="note" style="margin-top:12px">A conversation counts once, on the day it reaches ${S.cfg.rally} rallies (a rally is one message each way), for the setter who owns it at that moment. Days run midnight to midnight Central time.</p></div>`;
 }
 
 function allRows(){
@@ -224,7 +233,7 @@ function adminView(){
   <h3 style="margin-top:16px">Add someone</h3><div class="line"><input type="text" id="n_new" placeholder="Name"><select id="r_new"><option value="setter">Setter</option><option value="manager">Manager</option></select>${B('addSetter','','Add','s d')}</div></div>
   <div class="box sec"><h2>Team link</h2><p class="note">Send this to the setters. It lets them straight in.</p><div class="line"><input type="text" readonly value="${esc(link)}">${B('copy',esc(link),'Copy')}</div></div>
   </div><div>
-  <div class="box"><h2>Rules</h2><label>Live conversations per setter</label><input type="number" id="s_cap" value="${c.cap}" min="1"><label>Minutes since the last message before a conversation drops to the bench</label><input type="number" id="s_bench" value="${c.bench}" min="1"><label>Minutes a prospect's reply can sit unanswered before another setter may take it over</label><input type="number" id="s_take" value="${c.take}" min="1"><label style="font-weight:500"><input type="checkbox" id="s_protect" ${c.protect?'checked':''}> Block takeovers once the booking link has been sent</label><button class="btn d big" data-a="saveRules">Save rules</button></div>
+  <div class="box"><h2>Rules</h2><label>Live conversations per setter</label><input type="number" id="s_cap" value="${c.cap}" min="1"><label>Minutes since the last message before a conversation drops to the bench</label><input type="number" id="s_bench" value="${c.bench}" min="1"><label>Minutes a prospect's reply can sit unanswered before another setter may take it over</label><input type="number" id="s_take" value="${c.take}" min="1"><label>Rallies (a message each way) before a conversation counts towards the daily total</label><input type="number" id="s_rally" value="${c.rally}" min="1"><label style="font-weight:500"><input type="checkbox" id="s_protect" ${c.protect?'checked':''}> Block takeovers once the booking link has been sent</label><button class="btn d big" data-a="saveRules">Save rules</button></div>
   <div class="box sec"><h2>Slack · #dm-handoff</h2><p class="note">${S.slack_configured?'Connected. Booked calls and takeovers post to the channel.':'Not connected. Paste the incoming webhook URL below.'}</p><div class="line"><input type="text" id="s_hook" placeholder="${S.slack_configured?'Paste a new webhook URL to replace the current one':'https://hooks.slack.com/services/…'}" autocomplete="off">${B('saveHook','','Save','s d')}${B('testSlack','','Send test')}</div></div>
   </div></div>`;
 }
@@ -258,7 +267,7 @@ const H={
   filter(e){ui.filter=e.dataset.id;draw()},
   saveSetter(e){const id=e.dataset.id;act('admin_setter',{id,name:$('#n_'+id).value,role:$('#r_'+id).value,active:$('#a_'+id).checked},'Saved')},
   addSetter(){act('admin_setter',{name:$('#n_new').value,role:$('#r_new').value},'Added')},
-  saveRules(){act('admin_settings',{active_cap:$('#s_cap').value,bench_minutes:$('#s_bench').value,takeover_minutes:$('#s_take').value,protect_link:$('#s_protect').checked?'1':'0',site_url:SITE},'Rules saved')},
+  saveRules(){act('admin_settings',{active_cap:$('#s_cap').value,bench_minutes:$('#s_bench').value,takeover_minutes:$('#s_take').value,rally_min:$('#s_rally').value,protect_link:$('#s_protect').checked?'1':'0',site_url:SITE},'Rules saved')},
   saveHook(){const v=$('#s_hook').value.trim();if(!v)return toast('Paste the webhook URL first',true);act('admin_settings',{slack_webhook:v,site_url:SITE},'Slack connected')},
   async testSlack(){const r=await act('admin_test_slack');if(r)toast(r.slack==='sent'?'Test sent to Slack':'Slack is not connected or rejected it',r.slack!=='sent')}
 };
